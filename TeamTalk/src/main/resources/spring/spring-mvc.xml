@@ -14,6 +14,7 @@
 	<!-- 默认的注解映射的支持 -->
 	<mvc:annotation-driven/>
 	<!--视图解释器 -->
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
 		<property name="prefix" value="/WEB-NFI/jsp/"/>
 		<property name="suffix" value=".jsp"/>

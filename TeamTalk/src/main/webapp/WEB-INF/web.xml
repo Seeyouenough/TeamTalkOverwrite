@@ -59,7 +59,7 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 
-  //配置log4j
+  //配置log4j2
   <!-- log4j2-begin -->
   <listener>
     <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>

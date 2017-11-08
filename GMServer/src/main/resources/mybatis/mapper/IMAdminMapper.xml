@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.grpc.java.kernel.mybatis.mapper.IMAdminMapper" >
+  <resultMap id="BaseResultMap" type="com.grpc.java.kernel.entity.IMAdmin" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="uname" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="pwd" jdbcType="CHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="created" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="updated" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, uname, pwd, status, created, updated
+  </sql>
+
+  <select id="selectAdminById" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from IMAdmin where id = #{id}
+  </select>
+
+  <select id="selectAdminByName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from IMAdmin where uname = #{username}
+    limit 1
+  </select>
+
+  <select id="selectAllAdmin" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from IMAdmin
+  </select>
+
+
+  <update id="updatePasswordSelective" parameterType="com.grpc.java.kernel.entity.IMAdmin">
+    update IMAdmin
+    <set>
+      <if test="pwd!= null">
+        pwd = #{pwd,jdbcType=CHAR},
+      </if>
+    </set>
+    where uname = #{uname,jdbcType=VARCHAR}
+  </update>
+</mapper>

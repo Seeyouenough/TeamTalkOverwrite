@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package com.admin.grpc;
+
+message AdminRequest {
+    int32 id=1;
+
+    string uname=2;
+
+    string pwd=3;
+
+}
+
+message AdminResponse {
+    int32 id=1;
+
+    string uname=2;
+
+    string pwd=3;
+
+    int32 status_id=4;
+
+}
+
+service AdminService{
+      rpc login(AdminRequest) returns (AdminResponse);
+      rpc addAdmin(AdminRequest) returns (AdminResponse);
+      rpc removeAdmin(AdminRequest) returns (AdminResponse);
+}

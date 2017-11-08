@@ -1,9 +1,6 @@
-package com.webjava.kernel.entity;
+package com.grpc.java.kernel.entity;
 
-import java.io.Serializable;
-
-public class IMAdmin  {
-
+public class IMAdmin {
     private Integer id;
 
     private String uname="";
@@ -20,8 +17,6 @@ public class IMAdmin  {
     {
 
     }
-
-
 
     public void setId(Integer id) {
         this.id = id;
