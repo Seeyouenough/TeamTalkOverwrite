@@ -27,5 +27,6 @@ message AdminResponse {
 service AdminService{
       rpc login(AdminRequest) returns (AdminResponse);
       rpc addAdmin(AdminRequest) returns (AdminResponse);
+      rpc modifyPassword(AdminRequest) returns (AdminResponse);
       rpc removeAdmin(AdminRequest) returns (AdminResponse);
 }

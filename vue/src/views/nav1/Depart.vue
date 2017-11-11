@@ -190,14 +190,16 @@
 			},
 			formatName :function(row){
                      
+
                  for(var j=0 ; j<this.departList.length ; j++){
-                     var cp =
+                     /*var cp =
                      {  
                      	id:0,
                      	name:""
-                     }
-                     cp=this.departList[j];
+                     }*/
+                     let cp=this.departList[j];
                      if(row.parentid==cp.id){
+                     	//console.log("名字是"+cp.name);
                      	return cp.name;
                      }
                      else{}
@@ -227,7 +229,8 @@
 						}
 					else
 					{  
-                       this.users =  JSON.parse(res.data);
+                       this.users = JSON.parse(res.data).depart;
+                       //console.log(this.users);
 					   this.total = this.users.length; 
 					   this.listLoading = false;
 					   this.departList = [{"id":0,"name":"父部门"}];

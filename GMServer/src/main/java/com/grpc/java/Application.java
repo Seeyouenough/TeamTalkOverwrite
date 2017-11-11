@@ -1,10 +1,6 @@
 package com.grpc.java;
 
-import com.grpc.java.kernel.mybatis.mapper.IMAdminMapper;
-import com.grpc.java.server.AdminServerImpl;
-import com.grpc.java.service.IAdminService;
-import com.grpc.java.service.implement.AdminServiceImpl;
-import io.grpc.Server;
+import com.grpc.java.server.*;
 import io.grpc.ServerBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -24,6 +20,10 @@ public class Application {
         // Build server
         io.grpc.Server server = ServerBuilder.forPort(SERVER_PORT)
                 .addService(new AdminServerImpl(service))
+                .addService(new DiscoveryServerImpl(service))
+                .addService(new UserServerImpl(service))
+                .addService(new GroupServerImpl(service))
+                .addService(new DepartServerImpl(service))
                 .build();
 
         // Start server

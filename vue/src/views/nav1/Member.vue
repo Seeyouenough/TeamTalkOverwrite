@@ -300,7 +300,7 @@
                      }
                      else{}
                  }
-                 return ;
+                 return "无部门";
 			},
 			//性别显示转换
 			formatSex: function (row, column) {
@@ -321,7 +321,7 @@
 				
 
                 listDepartRequest(para).then((res)=>{
-                        this.departs =JSON.parse(res.data);
+                        this.departs =JSON.parse(res.data).depart;
                         this.num = this.departs.length;
                         this.departList = [];
                     for(var key in this.departs){
@@ -339,7 +339,7 @@
 					}
 					else
 					{  
-                       this.users = JSON.parse(res.data);
+                       this.users = JSON.parse(res.data).user;
 					   this.total = this.users.length; 
 					   this.listLoading = false;
 					}

@@ -200,7 +200,7 @@
 					}
 					else
 					{  
-                       this.users =  JSON.parse(res.data)
+                       this.users =  JSON.parse(res.data).discovery;
                        
 					   this.total = this.users.length; 
 					   

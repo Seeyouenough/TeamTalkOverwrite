@@ -50,14 +50,14 @@ public class AdminRestController {
                 AdminServiceGrpc.newBlockingStub(channel);
 
         // Create a request
-        AdminRequest adminRequest = AdminRequest.newBuilder()
+        AdminRequest loginRequest = AdminRequest.newBuilder()
                 .setUname(adminname)
                 .setPwd(password)
                 .build();
 
         // Send the request using the stub
-        System.out.println("GreeterClient sending request");
-        AdminResponse adminResponse = stub.login(adminRequest);
+        System.out.println("Client sending request");
+        AdminResponse adminResponse = stub.login(loginRequest);
 
         if(adminResponse.getStatusId()==0){
             HttpUtils.setJsonBody(response,new ResponseInfo(0,"很好"));
@@ -66,22 +66,6 @@ public class AdminRestController {
             HttpUtils.setJsonBody(response,new ResponseInfo(1,"用户名或密码错误"));
         }
 
-
-        /*password = EncryptHelper.encodeByMD5(password);
-
-        System.out.print(adminname);
-
-        IMAdmin user = this.adminService.getAdminByName(adminname);
-        if (user != null && user.getPwd().equals(password))
-        {
-            System.out.print("okok");
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"很好"));
-        }
-        else
-        {
-            System.out.print("fail");
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"用户名或密码错误"));
-        }*/
     }
 
     @RequestMapping(value="/modify", method= RequestMethod.POST)
@@ -92,14 +76,31 @@ public class AdminRestController {
         Gson gson = new Gson();
         IMAdmin admin=gson.fromJson(strData,IMAdmin.class);
 
-        IMAdmin user = this.adminService.getAdminByName(admin.getUname());
-        if(user!=null){
-            admin.setPwd(EncryptHelper.encodeByMD5(admin.getPwd()));
-            this.adminService.updatePassword(admin);
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
+
+        // Create a blocking stub with the channel
+        AdminServiceGrpc.AdminServiceBlockingStub stub =
+                AdminServiceGrpc.newBlockingStub(channel);
+
+        // Create a request
+        AdminRequest modifyRequest = AdminRequest.newBuilder()
+                .setUname(admin.getUname())
+                .setPwd(admin.getPwd())
+                .build();
+
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        AdminResponse modifyResponse = stub.modifyPassword(modifyRequest);
+
+        if(modifyResponse.getStatusId()==1){
             HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改成功!"));
-        }else{
+        }else
+        {
             HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改失败!"));
         }
+
     }
 
 

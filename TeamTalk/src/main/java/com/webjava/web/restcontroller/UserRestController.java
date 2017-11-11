@@ -6,12 +6,21 @@ package com.webjava.web.restcontroller;
 
 
 import com.google.gson.Gson;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.util.JsonFormat;
+import com.user.grpc.User;
+import com.user.grpc.UserRequest;
+import com.user.grpc.UserResponse;
+import com.user.grpc.UserServiceGrpc;
 import com.webjava.kernel.entity.IMUser;
 import com.webjava.kernel.service.IUserService;
 import com.webjava.model.IDList;
+import com.webjava.model.IDObject;
 import com.webjava.utils.EncryptHelper;
 import com.webjava.utils.HttpUtils;
 import com.webjava.utils.ResponseInfo;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Random;
 
 
@@ -32,111 +40,168 @@ public class UserRestController {
 
     public static Logger logger= LogManager.getLogger(UserRestController.class.getName());
 
+    private static final String HOST = "localhost";
+    private static final int PORT = 50051;
+
     @Resource
     private IUserService userService;
 
     @RequestMapping(value = "/user/list",method = RequestMethod.GET)
-    public void listUser(HttpServletRequest request, HttpServletResponse response){
-        List<IMUser> users=this.userService.getAllUser();
+    public void listUser(HttpServletRequest request, HttpServletResponse response) throws InvalidProtocolBufferException, InvalidProtocolBufferException {
 
-        logger.info("用户数量；"+users.size());
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
 
-        if(users.size()>0){
-            Gson gson=new Gson();
-            String data=gson.toJson(users);
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"显示所有用户",data));
-        }
-        else
+        // Create a blocking stub with the channel
+        UserServiceGrpc.UserServiceBlockingStub stub =
+                UserServiceGrpc.newBlockingStub(channel);
+
+        // Create a request
+        UserRequest listUserRequest = UserRequest.newBuilder().build();
+
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        UserResponse userResponse = stub.listUser(listUserRequest);
+
+
+        if(userResponse.getStatusId()==1){
+
+            String data= JsonFormat.printer().includingDefaultValueFields().preservingProtoFieldNames().print(userResponse);
+
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"显示所有用户",data));
+        }else
         {
-            System.out.println("fail");
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"无内容"));
+            System.out.println("nothing");
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"无内容"));
         }
+
     }
 
     @RequestMapping(value = "/user/add",method = RequestMethod.POST)
     public void addUser(HttpServletRequest request, HttpServletResponse response){
 
         String saltStr = Integer.toString(new Random().nextInt(10000));
-
         String  strJson= HttpUtils.getJsonBody(request);
-
-
 
         Gson gson=new Gson();
 
         IMUser user=gson.fromJson(strJson,IMUser.class);
 
-        System.out.println(user);
-        IMUser existUser =this.userService.getUserByName(user.getName());
-        if(existUser !=null){
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"用户名已存在！"));
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
+
+        // Create a blocking stub with the channel
+        UserServiceGrpc.UserServiceBlockingStub stub =
+                UserServiceGrpc.newBlockingStub(channel);
+
+        // Create a request
+        UserRequest addUserRequest = UserRequest.newBuilder()
+                .setName(user.getName())
+                .setSex(user.getSex())
+                .setNick(user.getNick())
+                .setPhone(user.getPhone())
+                .setPassword(EncryptHelper.encodeByMD5(user.getPassword()+saltStr))
+                .setSalt(saltStr)
+                .setEmail(user.getEmail())
+                .setDepartid(user.getdepartid())
+                .build();
+
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        UserResponse userResponse = stub.addUser(addUserRequest);
+
+        if(userResponse.getStatusId()==0){
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"添加成功"));
+        }else
+        {
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"内容存在"));
         }
-        else{
-            user.setSalt(saltStr);
-            user.setPassword(EncryptHelper.encodeByMD5(user.getPassword()+saltStr));
-            this.userService.addUser(user);
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"添加用户成功！"));
-        }
+
 
     }
 
     @RequestMapping(value = "/user/remove",method = RequestMethod.POST)
-    public void removeUser(HttpServletRequest request,HttpServletResponse response ){
+    public void removeUser(HttpServletRequest request,HttpServletResponse response ) {
 
-        String strjson =HttpUtils.getJsonBody(request);
-        Gson gson =new Gson();
-        IDList IDs =gson.fromJson(strjson,IDList.class);
+        String strjson = HttpUtils.getJsonBody(request);
+        Gson gson = new Gson();
+        IDList IDs = gson.fromJson(strjson, IDList.class);
 
-        for(int i=0 ; i<IDs.getParams().size() ;i++){
 
-            Integer id = IDs.getParams().get(i).getId();
-            IMUser exitId =this.userService.getUserById(id);
-            if(exitId!=null){
-                this.userService.deleteUser(id);
-                HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改成功！"));
-            }else
-            {
-                HttpUtils.setJsonBody(response,new ResponseInfo(0,"无此ID信息！"));
-            }
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
 
+        // Create a blocking stub with the channel
+        UserServiceGrpc.UserServiceBlockingStub stub =
+                UserServiceGrpc.newBlockingStub(channel);
+
+        UserRequest.Builder builder = UserRequest.newBuilder();
+        // Create a request
+        for (IDObject id: IDs.getParams()) {
+            User.Builder bu = User.newBuilder();
+            bu.setId(id.getId());
+            User user =bu.build();
+
+            builder.addUser(user);
         }
 
-       /* String strData = HttpUtils.getJsonBody(request);
-        Gson gson=new Gson();
-        IMUser user=gson.fromJson(strData,IMUser.class);
-        IMUser existUser=this.userService.getUserById(user.getId());
-        if(existUser == null){
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"用户不存在，无法进行删除操作"));
-        }
-        else {
-            this.userService.deleteUser(user.getId());
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"用户删除成功"));
-        }*/
+        UserRequest removeUserRequest = builder.build();
 
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        UserResponse userResponse = stub.removeUser(removeUserRequest);
+
+        if (userResponse.getStatusId()==1) {
+            HttpUtils.setJsonBody(response, new ResponseInfo(1, "删除成功！"));
+        } else {
+            HttpUtils.setJsonBody(response, new ResponseInfo(0, "部分信息未找到或未删除！"));
+        }
 
     }
 
     @RequestMapping(value = "/user/update",method = RequestMethod.POST)
     public void updateUser (HttpServletRequest request,HttpServletResponse response){
-       // String saltStr = Integer.toString(new Random().nextInt(10000));
-
         String strData =HttpUtils.getJsonBody(request);
-           Gson gson=new Gson();
-           IMUser user = gson.fromJson(strData,IMUser.class);
-           IMUser existUser=this.userService.getUserById(user.getId());
-           if(existUser !=null){
-              // user.setSalt(saltStr);
-              // user.setPassword(EncryptHelper.encodeByMD5(user.getPassword()+saltStr));
-               user.setPassword(null);
-               this.userService.updateUser(user);
-               HttpUtils.setJsonBody(response,new ResponseInfo(0,"更新用户信息成功！"));
-           }
-           else {
-               HttpUtils.setJsonBody(response,new ResponseInfo(1,"无此用户，用户信息更新失败"));
+        Gson gson=new Gson();
+        IMUser user = gson.fromJson(strData,IMUser.class);
 
-           }
+
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
+
+        // Create a blocking stub with the channel
+        UserServiceGrpc.UserServiceBlockingStub stub =
+                UserServiceGrpc.newBlockingStub(channel);
+
+        // Create a request
+        UserRequest modifyUserRequest = UserRequest.newBuilder()
+                .setId(user.getId())
+                .setName(user.getName())
+                .setSex(user.getSex())
+                .setNick(user.getNick())
+                .setEmail(user.getEmail())
+                .setPhone(user.getPhone())
+                .setDepartid(user.getdepartid())
+                .build();
+
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        UserResponse userResponse = stub.modifyUser(modifyUserRequest);
+
+        if(userResponse.getStatusId()==1){
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改成功"));
+        }else
+        {
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"内容不存在"));
+        }
+
 
     }
+
 
     @RequestMapping(value = "/user/updatePassword",method = RequestMethod.POST)
     public void updatePassword (HttpServletRequest request,HttpServletResponse response){
@@ -147,18 +212,31 @@ public class UserRestController {
 
 
         IMUser user = gson.fromJson(strData,IMUser.class);
-        logger.info(user);
-        IMUser existUser=this.userService.getUserById(user.getId());
-        if(existUser !=null){
-            user.setSalt(saltStr);
-            System.out.println(user);
-            user.setPassword(EncryptHelper.encodeByMD5(user.getPassword()+saltStr));
-            this.userService.updatePassword(user);
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"更新用户信息成功！"));
-        }
-        else {
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"无此用户，用户信息更新失败"));
 
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
+
+        // Create a blocking stub with the channel
+        UserServiceGrpc.UserServiceBlockingStub stub =
+                UserServiceGrpc.newBlockingStub(channel);
+
+        // Create a request
+        UserRequest modifyUserRequest = UserRequest.newBuilder()
+                .setId(user.getId())
+                .setPassword(EncryptHelper.encodeByMD5(user.getPassword()+saltStr))
+                .setSalt(saltStr)
+                .build();
+
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        UserResponse userResponse = stub.modifyPassword(modifyUserRequest);
+
+        if(userResponse.getStatusId()==1){
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改成功"));
+        }else
+        {
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"内容不存在"));
         }
 
     }
