@@ -191,20 +191,28 @@
 				this.listLoading = true;
 				//NProgress.start();
 				//console.log(para);
-				listDiscoveryRequest(para).then((res) => {
+				listDiscoveryRequest(para).then(data=> {
 					
-					if(res.data==""){
+					if(data.code==1){
 						this.users=[];
 						this.total =0;
 						this.listLoading = false;
 					}
-					else
+					else if(data.code==0)
 					{  
-                       this.users =  JSON.parse(res.data).discovery;
+                       this.users =  JSON.parse(data.data).discovery;
                        
 					   this.total = this.users.length; 
 					   
 					   this.listLoading = false;
+					}
+					else
+					{
+						this.listLoading=false;
+						this.$message({
+							message:'获取数据失败',
+							type:'warning'
+						});
 					}
 				});
 			},
@@ -220,13 +228,27 @@
 					let para =[];
 					para.push({id:row.id});   
 
-					removeDiscoveryRequest(para).then((res) => {
+					removeDiscoveryRequest(para).then(data => {
 						this.listLoading = false;
 						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
+						if(data.code==0){
+                                   this.$message({
+									message: '提交成功',
+									type: 'success'
+								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
 						//console.log("fuck");
 						this.getDiscoverys();
 					});
@@ -267,13 +289,27 @@
 							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
 							//para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							updateDiscoveryRequest(para).then((res) => {
+							updateDiscoveryRequest(para).then(data => {
 								this.editLoading = false;
 								//NProgress.done();
-								this.$message({
+								if(data.code==0){
+                                   this.$message({
 									message: '提交成功',
 									type: 'success'
 								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
 								this.$refs['editForm'].resetFields();
 								this.editFormVisible = false;
 								this.getDiscoverys();
@@ -292,14 +328,28 @@
 							let para = Object.assign({}, this.addForm);
 							//console.log("你好"+para);
 							//para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addDiscoveryRequest(para).then((res) => {
+							addDiscoveryRequest(para).then(data => {
 
 								this.addLoading = false;
 								//NProgress.done();
-								this.$message({
+								if(data.code==0){
+                                   this.$message({
 									message: '提交成功',
 									type: 'success'
 								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
 								this.$refs['addForm'].resetFields();
 								this.addFormVisible = false;
 								this.getDiscoverys();
@@ -332,13 +382,27 @@
 					this.listLoading = true;
 					//NProgress.start();
 					
-					removeDiscoveryRequest(idss).then((res) => {
+					removeDiscoveryRequest(idss).then(data => {
 						this.listLoading = false;
 						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
+						if(data.code==0){
+                                   this.$message({
+									message: '提交成功',
+									type: 'success'
+								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
 						this.getDiscoverys();
 					});
 				}).catch(() => {

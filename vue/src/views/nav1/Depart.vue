@@ -219,17 +219,17 @@
 				this.listLoading = true;
 				//NProgress.start();
 				
-				listDepartRequest(para).then((res) => {
+				listDepartRequest(para).then(data => {
 					
-					if(res.data==""){
+					if(data.code==1){
 						this.users=[];
 						this.total =0;
 						this.listLoading = false;
 						this.departList = [{"id":0,"name":"父部门"}];
 						}
-					else
+					else if(data.code==0)
 					{  
-                       this.users = JSON.parse(res.data).depart;
+                       this.users = JSON.parse(data.data).depart;
                        //console.log(this.users);
 					   this.total = this.users.length; 
 					   this.listLoading = false;
@@ -238,6 +238,14 @@
                            this.departList.push({id:this.users[key].id, name:this.users[key].departname});
                          }
                               
+					}
+					else
+					{
+						this.listLoading=false;
+						this.$message({
+							message:'获取部门数据失败',
+							type:'warning'
+						});
 					}
 				});
 			},
@@ -252,13 +260,26 @@
 					let para =[];
 					para.push({id:row.id});   
 
-					removeDepartRequest(para).then((res) => {
+					removeDepartRequest(para).then(data => {
 						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
+						if(data.code==0){
+                                this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							}
+							else if(data.code==1){
+								this.$message({
+								message: '删除失败',
+								type: 'warning'
+							});
+							}
+							else {
+	         						this.$message({
+									message: '服务器或网络错误',
+									type: 'error'
+								});
+							}
 						this.getDeparts();
 					});
 				}).catch(() => {
@@ -296,13 +317,27 @@
 							//console.log(this.editForm);
 							let para = Object.assign({}, this.editForm);
 							//para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							updateDepartRequest(para).then((res) => {
+							updateDepartRequest(para).then(data => {
 								this.editLoading = false;
 								//NProgress.done();
-								this.$message({
+								if(data.code==0){
+                                   this.$message({
 									message: '提交成功',
 									type: 'success'
 								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
 								this.$refs['editForm'].resetFields();
 								this.editFormVisible = false;
 								this.getDeparts();
@@ -324,14 +359,27 @@
 							let para = Object.assign({}, this.addForm);
 							//console.log(para);
 							//para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addDepartRequest(para).then((res) => {
+							addDepartRequest(para).then(data => {
 
 								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
+								if(data.code==0){
+                                   this.$message({
 									message: '提交成功',
 									type: 'success'
 								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
 								this.$refs['addForm'].resetFields();
 								this.addFormVisible = false;
 								this.getDeparts();
@@ -364,13 +412,27 @@
 					this.listLoading = true;
 					//NProgress.start();
 					
-					removeDepartRequest(idss).then((res) => {
+					removeDepartRequest(idss).then(data => {
 						this.listLoading = false;
 						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
+						if(data.code==0){
+                                this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							}
+							else if(data.code==1){
+								this.$message({
+								message: '删除失败',
+								type: 'warning'
+							});
+							}
+							else {
+	         						this.$message({
+									message: '服务器或网络错误',
+									type: 'error'
+								});
+							}
 						this.getDeparts();
 					});
 				}).catch(() => {

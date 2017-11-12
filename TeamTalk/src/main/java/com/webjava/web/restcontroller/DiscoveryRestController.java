@@ -61,11 +61,11 @@ public class DiscoveryRestController {
 
             String data= JsonFormat.printer().preservingProtoFieldNames().print(discoveryResponse);
 
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"显示所有用户",data));
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"显示所有用户",data));
         }else
         {
             System.out.println("nothing");
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"无内容"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"无内容"));
         }
 
     }
@@ -141,9 +141,9 @@ public class DiscoveryRestController {
         DiscoveryResponse discoveryResponse = stub.removeDiscovery(removeDiscoveryRequest);
 
         if (discoveryResponse.getStatusId()==1) {
-            HttpUtils.setJsonBody(response, new ResponseInfo(1, "修改成功！"));
+            HttpUtils.setJsonBody(response, new ResponseInfo(0, "修改成功！"));
         } else {
-            HttpUtils.setJsonBody(response, new ResponseInfo(0, "无此ID信息！"));
+            HttpUtils.setJsonBody(response, new ResponseInfo(1, "无此ID信息！"));
         }
 
     }
@@ -176,10 +176,10 @@ public class DiscoveryRestController {
         DiscoveryResponse discoveryResponse = stub.modifyDiscovery(modifyDiscoveryRequest);
 
         if(discoveryResponse.getStatusId()==1){
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改成功"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改成功"));
         }else
         {
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"内容不存在"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"内容不存在"));
         }
 
 

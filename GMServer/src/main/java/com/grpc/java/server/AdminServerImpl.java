@@ -17,10 +17,6 @@ public class AdminServerImpl extends AdminServiceGrpc.AdminServiceImplBase {
 
     public AdminServerImpl(BeanContainer service) {
         this.adminService= service.adminService;
-
-        IMAdmin user = this.adminService.getAdminByName("aaa");
-        if(user!=null)
-            System.out.println("Received request: ");
     }
     @Override
     public void login(AdminRequest request, StreamObserver<AdminResponse> responseStreamObserver){

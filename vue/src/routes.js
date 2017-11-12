@@ -1,5 +1,5 @@
 import Login from './views/Login.vue'
-import Modify from './views/ModifyPassword.vue'
+//import Modify from './views/ModifyPassword.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Main from './views/Main.vue'
@@ -15,12 +15,12 @@ let routes = [
         name: '',
         hidden: true
     },
-    {
+    /*{
         path: '/modify',
         component: Modify,
         name: '',
         hidden: true
-    },
+    },*/
     {
         path: '/404',
         component: NotFound,

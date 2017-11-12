@@ -9,7 +9,6 @@ import com.webjava.kernel.service.IGroupService;
 import com.webjava.model.IDList;
 import com.webjava.utils.HttpUtils;
 import com.webjava.utils.ResponseInfo;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,7 +58,7 @@ public class GroupRestController {
         }
         else{
             this.groupService.addGroup(group);
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"添加用户成功！"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"添加用户成功！"));
         }
 
     }
@@ -77,10 +76,10 @@ public class GroupRestController {
             IMGroup exitId =this.groupService.getGroupById(id);
             if(exitId!=null){
                 this.groupService.deleteGroup(id);
-                HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改成功！"));
+                HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改成功！"));
             }else
             {
-                HttpUtils.setJsonBody(response,new ResponseInfo(0,"无此ID信息！"));
+                HttpUtils.setJsonBody(response,new ResponseInfo(1,"无此ID信息！"));
             }
 
         }

@@ -64,11 +64,11 @@ public class DepartRestController {
 
             String data= JsonFormat.printer().includingDefaultValueFields().preservingProtoFieldNames().print(departResponse);
 
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"显示所有用户",data));
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"显示所有用户",data));
         }else
         {
             System.out.println("nothing");
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"无内容"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"无内容"));
         }
 
     }
@@ -144,9 +144,9 @@ public class DepartRestController {
         DepartResponse departResponse = stub.removeDepart(removeDepartRequest);
 
         if (departResponse.getStatusId()==1) {
-            HttpUtils.setJsonBody(response, new ResponseInfo(1, "删除成功！"));
+            HttpUtils.setJsonBody(response, new ResponseInfo(0, "删除成功！"));
         } else {
-            HttpUtils.setJsonBody(response, new ResponseInfo(0, "部分信息未找到或未删除！"));
+            HttpUtils.setJsonBody(response, new ResponseInfo(1, "部分信息未找到或未删除！"));
         }
 
     }
@@ -179,10 +179,10 @@ public class DepartRestController {
         DepartResponse departResponse = stub.modifyDepart(modifyDepartRequest);
 
         if(departResponse.getStatusId()==1){
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改成功"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改成功"));
         }else
         {
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"内容不存在"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"内容不存在"));
         }
 
 

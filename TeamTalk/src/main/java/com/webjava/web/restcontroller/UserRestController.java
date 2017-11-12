@@ -69,11 +69,11 @@ public class UserRestController {
 
             String data= JsonFormat.printer().includingDefaultValueFields().preservingProtoFieldNames().print(userResponse);
 
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"显示所有用户",data));
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"显示所有用户",data));
         }else
         {
             System.out.println("nothing");
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"无内容"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"无内容"));
         }
 
     }
@@ -155,9 +155,9 @@ public class UserRestController {
         UserResponse userResponse = stub.removeUser(removeUserRequest);
 
         if (userResponse.getStatusId()==1) {
-            HttpUtils.setJsonBody(response, new ResponseInfo(1, "删除成功！"));
+            HttpUtils.setJsonBody(response, new ResponseInfo(0, "删除成功！"));
         } else {
-            HttpUtils.setJsonBody(response, new ResponseInfo(0, "部分信息未找到或未删除！"));
+            HttpUtils.setJsonBody(response, new ResponseInfo(1, "部分信息未找到或未删除！"));
         }
 
     }
@@ -193,10 +193,10 @@ public class UserRestController {
         UserResponse userResponse = stub.modifyUser(modifyUserRequest);
 
         if(userResponse.getStatusId()==1){
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改成功"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改成功"));
         }else
         {
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"内容不存在"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"内容不存在"));
         }
 
 
@@ -233,10 +233,10 @@ public class UserRestController {
         UserResponse userResponse = stub.modifyPassword(modifyUserRequest);
 
         if(userResponse.getStatusId()==1){
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改成功"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改成功"));
         }else
         {
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"内容不存在"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"内容不存在"));
         }
 
     }

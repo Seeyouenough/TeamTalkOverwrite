@@ -151,19 +151,26 @@
 				this.listLoading = true;
 				//NProgress.start();
 				//console.log(para);
-				listGroupRequest(para).then((res) => {
-					if(res.data==""){
+				listGroupRequest(para).then(data => {
+					if(data.code==1){
 						this.users=[];
 						this.total =0;
 						this.listLoading = false;
 					}
-					else
+					else if(data.code==0)
 					{  
-                       this.users =  JSON.parse(res.data)
+                       this.users =  JSON.parse(data.data)
                        
 					   this.total = this.users.length; 
 					  
 					   this.listLoading = false;
+					}
+					else{
+						this.listLoading=false;
+						this.$message({
+							message:'获取用户组数据失败',
+							type:'warning'
+						});
 					}
 				});
 			},
@@ -177,13 +184,27 @@
 					let para =[];
 					para.push({id:row.id});   
 
-					removeGroupRequest(para).then((res) => {
+					removeGroupRequest(para).then(data => {
 						this.listLoading = false;
 						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
+						if(data.code==0){
+                                this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							}
+							else if(data.code==1){
+								this.$message({
+								message: '删除失败',
+								type: 'warning'
+							});
+							}
+							else {
+	         						this.$message({
+									message: '服务器或网络错误',
+									type: 'error'
+								});
+							}
 						this.getGroups();
 					});
 				}).catch(() => {
@@ -220,13 +241,27 @@
 							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
 							//para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							updateGroupRequest(para).then((res) => {
+							updateGroupRequest(para).then(data => {
 								this.editLoading = false;
 								//NProgress.done();
-								this.$message({
+								if(data.code==0){
+                                   this.$message({
 									message: '提交成功',
 									type: 'success'
 								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
 								this.$refs['editForm'].resetFields();
 								this.editFormVisible = false;
 								this.getGroups();
@@ -245,14 +280,28 @@
 							let para = Object.assign({}, this.addForm);
 							//console.log("你好"+para);
 							//para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addGroupRequest(para).then((res) => {
+							addGroupRequest(para).then(data => {
 
 								this.addLoading = false;
 								//NProgress.done();
-								this.$message({
+								if(data.code==0){
+                                   this.$message({
 									message: '提交成功',
 									type: 'success'
 								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
 								this.$refs['addForm'].resetFields();
 								this.addFormVisible = false;
 								this.getGroups();
@@ -285,13 +334,27 @@
 					this.listLoading = true;
 					//NProgress.start();
 					
-					removeGroupRequest(idss).then((res) => {
+					removeGroupRequest(idss).then(data => {
 						this.listLoading = false;
 						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
+						if(data.code==0){
+                                this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							}
+							else if(data.code==1){
+								this.$message({
+								message: '删除失败',
+								type: 'warning'
+							});
+							}
+							else {
+	         						this.$message({
+									message: '服务器或网络错误',
+									type: 'error'
+								});
+							}
 						this.getGroups();
 					});
 				}).catch(() => {

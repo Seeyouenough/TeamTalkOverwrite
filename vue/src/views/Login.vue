@@ -69,9 +69,9 @@
                    sessionStorage.setItem('userpassword', this.ruleForm2.checkPass);
                    this.$router.push({ path: '/Member' });
                    console.log('路由跳转'); 
-
               }
             });
+
           } else {
             console.log('error submit!!');
             return false;

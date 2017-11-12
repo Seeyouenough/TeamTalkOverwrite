@@ -72,14 +72,40 @@
 
 			</section>
 
+			<section>
+				
+			  <el-dialog title="修改密码" v-model="modifyFormVisible" :close-on-click-modal="false">
+              <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="150px" class="demo-ruleForm login-container">
+                <h3 class="title">管理员密码修改</h3>
+                <el-form-item label="管理员账号信息:" prop="username">
+                  <el-input type="text" :disabled="true" v-model="ruleForm2.username" auto-complete="off" ></el-input>
+                </el-form-item>
+                <el-form-item label="请输入旧密码:" prop="oldPass">
+                  <el-input type="password" v-model="ruleForm2.oldPass" auto-complete="off" placeholder="请输入旧密码"></el-input>
+                </el-form-item>
+                <el-form-item label="请输入新密码:" prop="newPass">
+                  <el-input type="password" v-model="ruleForm2.newPass" auto-complete="off" placeholder="请输入新密码"></el-input>
+                </el-form-item>
+                <el-form-item label="请再次输入新密码:" prop="checkPass">
+                  <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="请再次输入新密码"></el-input>
+                </el-form-item>
+                
+              </el-form>
+             <div slot="footer" class="dialog-footer">
+             	<el-button @click.native="modifyFormVisible = false">取消</el-button>
+             	<el-button type="primary" @click.native.prevent="decide" :loading="modifyLoading">提交</el-button>
+             </div>
+            </el-dialog>
+			</section>
+
 
 		</el-col>
 	</el-row>
 </template>
 
 <script>
-    
-
+  
+    import {modifyRequest } from '../api/api';
 
 	export default {
 		data() {
@@ -97,10 +123,94 @@
 					type: [],
 					resource: '',
 					desc: ''
+				},
+				modifyLoading: false,
+				modifyFormVisible: false,
+				//密码修改界面数据
+				ruleForm2: {
+				  username: '',
+				  oldPass:'',
+				  newPass:'',
+				  checkPass: ''
+				},
+				rules2: {
+				  oldPass: [
+				    { required: true, message: '请输入旧密码', trigger: 'blur' },
+
+				  ],
+				  newPass: [
+				    { required: true, message: '请输入新密码', trigger: 'blur' },
+				    
+				  ],
+				  checkPass: [
+				    { required: true, message: '请再次输入新密码', trigger: 'blur' },
+				    
+				  ]
+
 				}	
 			}
 		},
 		methods: {
+			decide(){
+			      if(this.ruleForm2.oldPass!=sessionStorage.getItem("userpassword")){
+			        this.$message({
+			                         message: "旧密码错误,请重新输入!",
+			                         type: 'warning'
+			                        });
+			      }else{
+			        if(this.ruleForm2.newPass!=this.ruleForm2.checkPass){
+			           this.$message({
+			            message: "两次新密码输入不一致,请重新输入!",
+			            type: 'warning'
+			           });
+			        }else{
+			           this.handleSubmit2();
+			        }
+			      }
+			},
+			handleSubmit2() {
+			  this.$refs.ruleForm2.validate((valid) => {
+			    if (valid) {
+			      this.modifyLoading = true;
+			      //NProgress.start(); 
+			      var modifyParams = { uname: this.ruleForm2.username, pwd: this.ruleForm2.checkPass };
+			      //console.log(modifyParams);
+			      modifyRequest(modifyParams).then(data => {
+			      
+			      if(data.code==1){
+			      	this.modifyLoading=false;
+						this.$message({
+							message:'修改管理员密码失败',
+							type:'warning'
+						});
+			      }
+			      else if(data.code==0){
+			      	this.modifyLoading = false;
+			      this.$message({
+			                       message: "密码修改成功!",
+			                       type: 'success'
+			                   });
+			      sessionStorage.removeItem('username');
+			      sessionStorage.removeItem('userpassword');
+			      this.$router.push({ path: '/Login' });
+			  }else
+			  {
+			  	  this.modifyLoading=false;
+						this.$message({
+							message:'请求密码修改失败',
+							type:'error'
+						});
+			  }
+			      
+			      });
+
+
+			    } else {
+			      console.log('error submit!!');
+			      return false;
+			    }
+			  });
+			},
 			onSubmit() {
 				console.log('submit!');
 			},
@@ -114,15 +224,15 @@
 			},
 			//修改管理员密码
 			modifyPassword : function(){
-                var _this = this;
-				this.$confirm('请确认是否修改密码?', '提示', {
-					
-				}).then(() => {
-				 
-					_this.$router.push('/modify');
-				}).catch(() => {
+                this.modifyFormVisible = true;
+                this.ruleForm2={
+				  username: sessionStorage.getItem("username"),
+				  oldPass:'',
+				  newPass:'',
+				  checkPass: ''
+				};
+                
 
-				});
 			},
 			//退出登录
 			logout: function () {

@@ -329,20 +329,26 @@
                     }
                 });
 
-				listUsersRequest(para).then((res) => {
-
-					//console.log(res);
-					if(res.data==""){
+				listUsersRequest(para).then(data => {
+                    console.log(data);
+					if(data.code==1){
 						this.users=[];
 						this.total=0;
 						this.listLoading = false;
 					}
-					else
+					else if (data.code==0)
 					{  
-                       this.users = JSON.parse(res.data).user;
+                       this.users = JSON.parse(data.data).user;
 					   this.total = this.users.length; 
 					   this.listLoading = false;
 					}
+					else{
+						this.listLoading=false;
+						this.$message({
+							message:'获取用户数据失败',
+							type:'warning'
+						});
+					} 
 					
 					//NProgress.done();
 				});
@@ -358,14 +364,28 @@
 					let para =[];
 					para.push({id:row.id});   
 
-					removeUserRequest(para).then((res) => {
+					removeUserRequest(para).then(data => {
 						this.listLoading = false;
 						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
+						if(data.code==0){
+                                this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							}
+							else if(data.code==1){
+								this.$message({
+								message: '删除失败',
+								type: 'warning'
+							});
+							}
+							else {
+	         						this.$message({
+									message: '服务器或网络错误',
+									type: 'error'
+								});
+							}
+    					this.getUsers();
 					});
 				}).catch(() => {
 
@@ -424,13 +444,27 @@
 							//this.editForm.password=this.md5(this.editForm.password);
 							let para = Object.assign({}, this.editForm);
 							//para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							updateUserRequest(para).then((res) => {
+							updateUserRequest(para).then(data => {
 								this.editLoading = false;
 								//NProgress.done();
-								this.$message({
+								if(data.code==0){
+                                   this.$message({
 									message: '提交成功',
 									type: 'success'
 								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
 								this.$refs['editForm'].resetFields();
 								this.editFormVisible = false;
 								this.getUsers();
@@ -448,16 +482,29 @@
 							//NProgress.start();
 							this.addForm.password=this.md5(this.addForm.password);
 							let para = Object.assign({}, this.addForm);
-							//console.log("你好"+para);
 							//para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUserRequest(para).then((res) => {
-
+							addUserRequest(para).then(data => {
+                                
 								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
+								if(data.code==0){
+                                   this.$message({
 									message: '提交成功',
 									type: 'success'
 								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
+								
 								this.$refs['addForm'].resetFields();
 								this.addFormVisible = false;
 								this.getUsers();
@@ -480,14 +527,28 @@
 					        let para ={id:this.editPassword.id,password:this.editPassword.password};
 			   
 						    //console.log("内容是:"+para);
-							updatePasswordRequest(para).then((res) => {
+							updatePasswordRequest(para).then(data => {
 
 								this.editPasswordLoading = false;
 								//NProgress.done();
-								this.$message({
+								if(data.code==0){
+                                   this.$message({
 									message: '提交成功',
 									type: 'success'
 								});
+								}
+								else if(data.code==1){
+									this.$message({
+									message: '提交失败',
+									type: 'warning'
+								});
+								}
+								else {
+									this.$message({
+										message: '服务器或网络错误',
+										type: 'error'
+									});
+								}
 								this.$refs['editPassword'].resetFields();
 								this.editPasswordVisible = false;
 								this.getUsers();
@@ -519,13 +580,27 @@
 				}).then(() => {
 					this.listLoading = true;
 					//NProgress.start();
-					removeUserRequest(idss).then((res) => {
+					removeUserRequest(idss).then(data => {
 						this.listLoading = false;
 						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
+						if(data.code==0){
+                                this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							}
+							else if(data.code==1){
+								this.$message({
+								message: '删除失败',
+								type: 'warning'
+							});
+							}
+							else {
+								this.$message({
+								message: '服务器或网络错误',
+								type: 'error'
+								});
+								}
 						this.getUsers();
 					});
 				}).catch(() => {
