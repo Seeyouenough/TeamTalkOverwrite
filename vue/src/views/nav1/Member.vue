@@ -300,6 +300,7 @@
                      }
                      else{}
                  }
+                 row.departid=0;
                  return "无部门";
 			},
 			//性别显示转换
@@ -323,7 +324,7 @@
                 listDepartRequest(para).then((res)=>{
                         this.departs =JSON.parse(res.data).depart;
                         this.num = this.departs.length;
-                        this.departList = [];
+                        this.departList = [{id:0,name:"无部门"}];
                     for(var key in this.departs){
                         this.departList.push({id:this.departs[key].id, name:this.departs[key].departname});
                     }

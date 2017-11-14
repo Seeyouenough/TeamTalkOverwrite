@@ -192,18 +192,16 @@
                      
 
                  for(var j=0 ; j<this.departList.length ; j++){
-                     /*var cp =
-                     {  
-                     	id:0,
-                     	name:""
-                     }*/
+                   
                      let cp=this.departList[j];
                      if(row.parentid==cp.id){
                      	//console.log("名字是"+cp.name);
                      	return cp.name;
                      }
+
                      else{}
                  }
+                 row.parentid=0;
                  return ;
 			},
 			handleCurrentChange(val) {
@@ -262,6 +260,7 @@
 
 					removeDepartRequest(para).then(data => {
 						this.listLoading = false;
+						
 						if(data.code==0){
                                 this.$message({
 								message: '删除成功',
@@ -273,6 +272,11 @@
 								message: '删除失败',
 								type: 'warning'
 							});
+							}else if(data.code==-1){
+								this.$message({
+									message: data.msg,
+									type:'warning'
+								});
 							}
 							else {
 	         						this.$message({
@@ -426,6 +430,12 @@
 								message: '删除失败',
 								type: 'warning'
 							});
+							}
+							else if(data.code==-1){
+								this.$message({
+									message: data.msg,
+									type:'warning'
+								});
 							}
 							else {
 	         						this.$message({

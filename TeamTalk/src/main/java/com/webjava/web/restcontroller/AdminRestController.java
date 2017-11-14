@@ -5,14 +5,12 @@ package com.webjava.web.restcontroller;
  */
 
 
-import com.admin.grpc.Admin;
 import com.admin.grpc.AdminRequest;
 import com.admin.grpc.AdminResponse;
 import com.admin.grpc.AdminServiceGrpc;
 import com.google.gson.Gson;
 import com.webjava.kernel.entity.IMAdmin;
 import com.webjava.kernel.service.IAdminService;
-import com.webjava.utils.EncryptHelper;
 import com.webjava.utils.HttpUtils;
 import com.webjava.utils.ResponseInfo;
 import io.grpc.ManagedChannel;
@@ -95,10 +93,10 @@ public class AdminRestController {
         AdminResponse modifyResponse = stub.modifyPassword(modifyRequest);
 
         if(modifyResponse.getStatusId()==1){
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改成功!"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改成功!"));
         }else
         {
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改失败!"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"修改失败!"));
         }
 
     }

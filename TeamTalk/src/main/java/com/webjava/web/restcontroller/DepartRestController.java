@@ -143,10 +143,12 @@ public class DepartRestController {
         System.out.println("Client sending request");
         DepartResponse departResponse = stub.removeDepart(removeDepartRequest);
 
-        if (departResponse.getStatusId()==1) {
+        if (departResponse.getStatusId()==0) {
             HttpUtils.setJsonBody(response, new ResponseInfo(0, "删除成功！"));
-        } else {
+        } else if(departResponse.getStatusId()==1){
             HttpUtils.setJsonBody(response, new ResponseInfo(1, "部分信息未找到或未删除！"));
+        }else if(departResponse.getStatusId()==-1){
+            HttpUtils.setJsonBody(response, new ResponseInfo(-1,"删除的部门为其余部门的父部门或该部门有用户存在,无法进行删除操作"));
         }
 
     }

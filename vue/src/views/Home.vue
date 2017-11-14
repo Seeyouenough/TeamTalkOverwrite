@@ -74,9 +74,8 @@
 
 			<section>
 				
-			  <el-dialog title="修改密码" v-model="modifyFormVisible" :close-on-click-modal="false">
+			  <el-dialog title="管理员密码修改" v-model="modifyFormVisible" :close-on-click-modal="false">
               <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="150px" class="demo-ruleForm login-container">
-                <h3 class="title">管理员密码修改</h3>
                 <el-form-item label="管理员账号信息:" prop="username">
                   <el-input type="text" :disabled="true" v-model="ruleForm2.username" auto-complete="off" ></el-input>
                 </el-form-item>
@@ -262,6 +261,7 @@
 				//this.sysUserName = user.name || '';
 				//this.sysUserAvatar = user.avatar || '';
 			//}
+			this.sysUserAvatar = 'static/user.png' || '';
 
 
 		}
