@@ -17,13 +17,17 @@
 						<el-dropdown-item>设置</el-dropdown-item>
 						<el-dropdown-item divided @click.native="modifyPassword">修改密码</el-dropdown-item>
 						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+						<el-dropdown-item divided >删除管理员信息</el-dropdown-item>
+					    <!-- 删除管理员信息必须要先输密码验证,然后再进行删除! -->
 					</el-dropdown-menu>
 				</el-dropdown>
 			</el-col>
 		</el-col>
 		<el-col :span="24" class="main">
 			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
-				<!--导航菜单-->
+			
+                <!--导航菜单-->
+				<transition v-on:enter="menu_enter" v-on:leave="menu_leave">     
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
 					 unique-opened router v-show="!collapsed">
 					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
@@ -32,8 +36,12 @@
 							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
 						</el-submenu>
 						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
+					    
 					</template>
 				</el-menu>
+				</transition>
+
+
 				<!--导航菜单-折叠后-->
 				<ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
 					<li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item">
@@ -53,24 +61,29 @@
 			</aside>
 			
             <!-- 显示所有界面 -->
-			<section class="content-container">
-				<div class="grid-content bg-purple-light">
-					<el-col :span="24" class="breadcrumb-container">
-						<strong class="title">{{$route.name}}</strong>
-						<el-breadcrumb separator="/" class="breadcrumb-inner">
-							<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
-								{{ item.name }}
-							</el-breadcrumb-item>
-						</el-breadcrumb>
-					</el-col>
-					<el-col :span="24" class="content-wrapper">
-						<transition name="fade" mode="out-in">
-							<router-view></router-view>
-						</transition>
-					</el-col>
-				</div>
+            <section class="content-container">
+                <div class="grid-content bg-purple-light">
 
-			</section>
+                    <el-col :span="24" class="breadcrumb-container">
+                        <strong class="title">{{$route.name}}</strong>
+                        <el-breadcrumb separator="/" class="breadcrumb-inner">
+                            <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+                                {{ item.name }}
+                            </el-breadcrumb-item>
+                        </el-breadcrumb>
+                    </el-col>
+
+             
+                    <el-col :span="24" class="content-wrapper">
+                        <transition name="fade" mode="out-in">
+                        <!-- 对应的组件内容渲染到router-view中 -->
+                            <router-view></router-view>
+                        </transition>
+                    </el-col>
+                    
+                </div>
+
+            </section>
 
 			<section>
 				
@@ -150,6 +163,12 @@
 			}
 		},
 		methods: {
+            menu_enter:function(el,done){
+
+            },
+            menu_leave:function(el,done){
+                done();
+            },
 			decide(){
 			      if(this.ruleForm2.oldPass!=sessionStorage.getItem("userpassword")){
 			        this.$message({
@@ -221,15 +240,23 @@
 			},
 			handleselect: function (a, b) {
 			},
-			//修改管理员密码
+			//显示修改密码界面
 			modifyPassword : function(){
-                this.modifyFormVisible = true;
-                this.ruleForm2={
-				  username: sessionStorage.getItem("username"),
-				  oldPass:'',
-				  newPass:'',
-				  checkPass: ''
-				};
+
+				this.$confirm('确认更改密码吗?', '提示', {
+                    type: 'warning'
+                }).then(() => {
+                
+                            this.modifyFormVisible = true;
+                            this.ruleForm2={
+            				  username: sessionStorage.getItem("username"),
+            				  oldPass:'',
+            				  newPass:'',
+            				  checkPass: ''
+            				};
+
+                }).catch(() => { });
+               
                 
 
 			},

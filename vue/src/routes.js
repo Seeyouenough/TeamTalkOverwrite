@@ -1,5 +1,4 @@
 import Login from './views/Login.vue'
-//import Modify from './views/ModifyPassword.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Main from './views/Main.vue'
@@ -7,11 +6,21 @@ import Member from './views/nav1/Member.vue'
 import Depart from './views/nav1/Depart.vue'
 import Group from './views/nav1/Group.vue'
 import Discovery from './views/nav1/Discovery.vue'
+import Add from './views/nav1/addUser.vue'
+
+
+
 
 let routes = [
     {
         path: '/login',
         component: Login,
+        name: '',
+        hidden: true
+    },
+    {
+        path: '/add',
+        component: Add,
         name: '',
         hidden: true
     },
@@ -31,19 +40,20 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '',
-        iconCls: 'el-icon-message',//图标样式class
-        leaf: true,
+        name: '用户管理',
+        iconCls: 'el-icon-arrow-right',//图标样式class
+        //leaf: true,
         children: [
+            { path: '/main', component: Main, name: '主页', hidden: true },
             { path: '/Member', component: Member, name: '用户管理' }
         ]
     },
     {
         path: '/',
         component: Home,
-        name: '',
-        iconCls: 'fa fa-id-card-o',
-        leaf: true,
+        name: '组织架构',
+        iconCls: 'el-icon-arrow-right',
+        //leaf: true,
         children: [
             { path: '/Depart', component: Depart, name: '组织架构' }
         ]
@@ -51,9 +61,9 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '',
-        iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
+        name: '群组管理',
+        iconCls: 'el-icon-arrow-right',
+        //leaf: true,//只有一个节点
         children: [
             { path: '/Group', component: Group, name: '群组管理' }
         ]
@@ -61,9 +71,9 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '',
-        iconCls: 'fa fa-bar-chart',
-        leaf: true,
+        name: '系统设置',
+        iconCls: 'el-icon-arrow-right',
+        //leaf: true,
         children: [
             { path: '/Discovery', component: Discovery, name: '系统设置' }
         ]

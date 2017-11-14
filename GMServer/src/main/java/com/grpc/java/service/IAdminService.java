@@ -15,6 +15,8 @@ public interface IAdminService {
 
     IMAdmin getAdminByName(String userName);
 
+    Boolean addAdmin(IMAdmin user);
+
     List<IMAdmin> getAllAdmin();
 
     Boolean updatePassword(IMAdmin user);

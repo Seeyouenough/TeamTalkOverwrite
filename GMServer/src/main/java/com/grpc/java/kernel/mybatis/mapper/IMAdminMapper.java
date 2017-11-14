@@ -15,5 +15,7 @@ public interface IMAdminMapper {
 
     List<IMAdmin> selectAllAdmin();
 
+    int insertSelective(IMAdmin record);
+
     int updatePasswordSelective(IMAdmin record);
 }

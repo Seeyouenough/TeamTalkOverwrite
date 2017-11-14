@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
   }
   //let user = JSON.parse(sessionStorage.getItem('username'));
   let user=sessionStorage.getItem('username');
-  if (!user && to.path != '/login') {
+  if (!user &&(to.path != '/login')&&(to.path != '/add') ) {
     next({ path: '/login' })
   } else {
     next()

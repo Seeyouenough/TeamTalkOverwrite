@@ -408,18 +408,20 @@
 			},
 			//显示改密界面
 			EditPassword: function (index, row) {
-				this.editPasswordVisible = true;
+				this.$confirm('确认更改密码吗?', '提示', {
+                    type: 'warning'
+                }).then(() => {
                 
-				//this.editPassword = Object.assign({}, row);
-				this.editPassword={
-					name:'',
-					password:'',
-					passwordagain:''
-				};
-				//console.log(row.name);
-				this.editPassword.name=row.name;
-				this.editPassword.id=row.id;
-				
+                	this.editPasswordVisible = true;
+                	this.editPassword={
+                		name:'',
+                		password:'',
+                		passwordagain:''
+                	};
+                	this.editPassword.name=row.name;
+                	this.editPassword.id=row.id;
+
+                }).catch(() => { });
 
 			},
 			//显示新增界面

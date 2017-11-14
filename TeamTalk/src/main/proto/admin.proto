@@ -4,12 +4,28 @@ option java_multiple_files = true;
 
 package com.admin.grpc;
 
+message Admin{
+    int32 id=1;
+
+    string uname=2;
+
+    string pwd=3;
+
+    int32 status=12;
+
+    int32 created=13;
+
+    int32 updated=14;
+}
+
 message AdminRequest {
     int32 id=1;
 
     string uname=2;
 
     string pwd=3;
+
+    repeated Admin admin=5;
 
 }
 
@@ -22,11 +38,12 @@ message AdminResponse {
 
     int32 status_id=4;
 
+    repeated Admin admin=5;
 }
 
 service AdminService{
-      rpc login(AdminRequest) returns (AdminResponse);
-      rpc addAdmin(AdminRequest) returns (AdminResponse);
-      rpc modifyPassword(AdminRequest) returns (AdminResponse);
-      rpc removeAdmin(AdminRequest) returns (AdminResponse);
+    rpc login(AdminRequest) returns (AdminResponse);
+    rpc addAdmin(AdminRequest) returns (AdminResponse);
+    rpc modifyPassword(AdminRequest) returns (AdminResponse);
+    rpc removeAdmin(AdminRequest) returns (AdminResponse);
 }

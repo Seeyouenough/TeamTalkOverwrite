@@ -34,6 +34,11 @@ public class AdminServiceImpl implements IAdminService {
         return imAdminMapper.selectAllAdmin();
     }
 
+    @Override
+    public Boolean addAdmin(IMAdmin user) {
+        return imAdminMapper.insertSelective(user) > 0;
+    }
+
 
     @Override
     public Boolean updatePassword(IMAdmin user) {

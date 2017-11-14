@@ -90,6 +90,8 @@
       </if>
     </trim>
   </insert>
+
+
   <update id="updateByPrimaryKeySelective" parameterType="com.webjava.kernel.entity.IMDiscovery">
     update IMDiscovery
     <set>

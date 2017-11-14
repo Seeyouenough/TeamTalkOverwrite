@@ -101,6 +101,42 @@ public class AdminRestController {
 
     }
 
+    @RequestMapping(value = "/admin/add",method = RequestMethod.POST)
+    public void addAdmin(HttpServletRequest request, HttpServletResponse response){
+
+        String  strJson= HttpUtils.getJsonBody(request);
+
+        Gson gson=new Gson();
+
+        IMAdmin user=gson.fromJson(strJson,IMAdmin.class);
+
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
+
+        // Create a blocking stub with the channel
+        AdminServiceGrpc.AdminServiceBlockingStub stub =
+                AdminServiceGrpc.newBlockingStub(channel);
+
+        // Create a request
+        AdminRequest addAdminRequest = AdminRequest.newBuilder()
+                .setUname(user.getUname())
+                .setPwd(user.getPwd())
+                .build();
+
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        AdminResponse adminResponse = stub.addAdmin(addAdminRequest);
+
+        if(adminResponse.getStatusId()==0){
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"添加成功"));
+        }else
+        {
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"内容存在"));
+        }
+
+
+    }
 
 
 }

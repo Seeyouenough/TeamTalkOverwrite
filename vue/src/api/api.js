@@ -36,6 +36,8 @@ export const loginRequest = params => { return axios.get(`${server_base}/login`,
 
 export const modifyRequest = params =>{ return axios.post(`${server_base}/modify`,params).then(res => res.data); }; 
 
+export const addRequest = params => { return axios.post(`${server_base}/admin/add`, params).then(res => res.data); };
+
 
 export const listUsersRequest = params => { return axios.get(`${server_base}/user/list`, params).then(res => res.data); };
 

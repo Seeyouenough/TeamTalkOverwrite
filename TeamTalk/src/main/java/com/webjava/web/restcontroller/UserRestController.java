@@ -236,7 +236,7 @@ public class UserRestController {
             HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改成功"));
         }else
         {
-            HttpUtils.setJsonBody(response,new ResponseInfo(1,"内容不存在"));
+            HttpUtils.setJsonBody(response,new ResponseInfo(1 ,"内容不存在"));
         }
 
     }

@@ -78,6 +78,32 @@ public class AdminServerImpl extends AdminServiceGrpc.AdminServiceImplBase {
         responseStreamObserver.onCompleted();
     }
 
+    @Override
+    public void addAdmin(AdminRequest request, StreamObserver<AdminResponse> responseStreamObserver){
 
+        String name=request.getUname();
+        IMAdmin user=new IMAdmin();
+
+        IMAdmin existUser =this.adminService.getAdminByName(name);
+        if(existUser !=null){
+            System.out.println("内容已存在");
+            AdminResponse response = AdminResponse.newBuilder()
+                    .setStatusId(1)
+                    .build();
+            responseStreamObserver.onNext(response);
+        }
+        else{
+            user.setUname(name);
+            user.setPwd(request.getPwd());
+            this.adminService.addAdmin(user);
+            System.out.println("添加成功");
+            AdminResponse response = AdminResponse.newBuilder()
+                    .setStatusId(0)
+                    .build();
+            responseStreamObserver.onNext(response);
+        }
+
+        responseStreamObserver.onCompleted();
+    }
 
 }
