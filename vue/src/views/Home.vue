@@ -27,7 +27,7 @@
 
    
 		<el-col :span="24" class="main">
-			<aside >
+			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
                 <!--导航菜单-->
 				<transition v-on:enter="menu_enter" v-on:leave="menu_leave">     
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect" unique-opened router v-show="!collapsed">
