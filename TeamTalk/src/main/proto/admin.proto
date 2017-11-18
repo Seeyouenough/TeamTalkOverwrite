@@ -5,21 +5,25 @@ option java_multiple_files = true;
 package com.admin.grpc;
 
 message Admin{
-    int32 id=1;
+    int32 user_id=1;
 
     string uname=2;
 
     string pwd=3;
 
+    int32 role_id=4;
+
+    string power=5;
+
     int32 status=12;
 
-    int32 created=13;
+    string create_time=13;
 
-    int32 updated=14;
+    string update_time=14;
 }
 
 message AdminRequest {
-    int32 id=1;
+    int32 user_id=1;
 
     string uname=2;
 
@@ -30,7 +34,7 @@ message AdminRequest {
 }
 
 message AdminResponse {
-    int32 id=1;
+    int32 user_id=1;
 
     string uname=2;
 

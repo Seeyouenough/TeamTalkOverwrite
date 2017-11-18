@@ -1,55 +1,54 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.grpc.java.kernel.mybatis.mapper.IMAdminMapper" >
-  <resultMap id="BaseResultMap" type="com.grpc.java.kernel.entity.IMAdmin" >
-    <constructor >
-      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="uname" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="pwd" jdbcType="CHAR" javaType="java.lang.String" />
-      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
-      <arg column="created" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="updated" jdbcType="INTEGER" javaType="java.lang.Integer" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grpc.java.kernel.mybatis.mapper.IMAdminMapper">
+  <resultMap id="BaseResultMap" type="com.grpc.java.kernel.entity.IMAdmin">
+    <constructor>
+      <idArg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="uname" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="pwd" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="role_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="power" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, uname, pwd, status, created, updated
+  <sql id="Base_Column_List">
+    user_id, uname, pwd, status, role_id, power, create_time, update_time
   </sql>
+
+
 
   <select id="selectAdminById" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
-    from IMAdmin where id = #{id}
+    <include refid="Base_Column_List" />
+    from IMAdmin where user_id = #{user_id}
   </select>
 
   <select id="selectAdminByName" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from IMAdmin where uname = #{username}
     limit 1
   </select>
 
   <select id="selectAllAdmin" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from IMAdmin
   </select>
 
+  <delete id="deleteByPrimaryKey" >
+    delete from IMAdmin
+    where user_id = #{user_id,jdbcType=INTEGER}
+  </delete>
 
-  <update id="updatePasswordSelective" parameterType="com.grpc.java.kernel.entity.IMAdmin">
-    update IMAdmin
-    <set>
-      <if test="pwd!= null">
-        pwd = #{pwd,jdbcType=CHAR},
-      </if>
-    </set>
-    where uname = #{uname,jdbcType=VARCHAR}
-  </update>
 
   <insert id="insertSelective" parameterType="com.grpc.java.kernel.entity.IMAdmin">
     insert into IMAdmin
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="uname != null">
         uname,
@@ -60,36 +59,82 @@
       <if test="status != null">
         status,
       </if>
-      <if test="created != null">
-        created,
+      <if test="roleId != null">
+        role_id,
       </if>
-      <if test="updated != null">
-        updated,
+      <if test="power != null">
+        power,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
-
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
-      <if test="uname!= null">
+      <if test="uname != null">
         #{uname,jdbcType=VARCHAR},
       </if>
       <if test="pwd != null">
         #{pwd,jdbcType=CHAR},
       </if>
       <if test="status != null">
-        #{status,jdbcType=INTEGER},
+        #{status,jdbcType=TINYINT},
       </if>
-      <if test="created != null">
-        #{created,jdbcType=INTEGER},
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
       </if>
-      <if test="updated != null">
-        #{updated,jdbcType=INTEGER},
+      <if test="power != null">
+        #{power,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.grpc.java.kernel.entity.IMAdmin">
+    update IMAdmin
+    <set>
+      <if test="uname != null">
+        uname = #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="power != null">
+        power = #{power,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
 
-
+  <update id="updatePasswordSelective" parameterType="com.grpc.java.kernel.entity.IMAdmin">
+    update IMAdmin
+    <set>
+      <if test="pwd!= null">
+        pwd = #{pwd,jdbcType=CHAR},
+      </if>
+    </set>
+    where uname = #{uname,jdbcType=VARCHAR}
+  </update>
 
 </mapper>

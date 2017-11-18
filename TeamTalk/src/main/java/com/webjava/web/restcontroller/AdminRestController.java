@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 
 
 @RestController
@@ -35,7 +36,7 @@ public class AdminRestController {
 
 
     @RequestMapping(value="/login", method= RequestMethod.GET)
-    public void login(HttpServletRequest request, HttpServletResponse response){
+    public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String adminname = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -57,8 +58,22 @@ public class AdminRestController {
         System.out.println("Client sending request");
         AdminResponse adminResponse = stub.login(loginRequest);
 
+        BufferedReader br = new BufferedReader( new InputStreamReader(new FileInputStream("D:\\working\\IDEAProject\\TeamTalkOverwrite\\TeamTalk\\Menus.json"),"UTF-8"));
+        String str;
+        String data;
+        StringBuffer strb =new StringBuffer();
+        while((str=br.readLine())!=null){
+            strb.append(str);
+
+        }
+        System.out.println(strb);
+        data=strb.toString();
+
+
         if(adminResponse.getStatusId()==0){
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"很好"));
+
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"很好",data));
+
         }else
         {
             HttpUtils.setJsonBody(response,new ResponseInfo(1,"用户名或密码错误"));

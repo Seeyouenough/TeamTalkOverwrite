@@ -25,4 +25,16 @@ public class BeanContainer {
     @Resource
     public IUserService userService;
 
+    @Resource
+    public IAdmin_PowerService admin_powerService;
+
+    @Resource
+    public IAdmin_RoleService admin_roleService;
+
+    @Resource
+    public IPowerService powerService;
+
+    @Resource
+    public IRoleService roleService;
+
 }

@@ -83,6 +83,46 @@
 
         </table>
 
+        <table tableName="IMAdmin_Power"
+               domainObjectName="IMAdmin_Power"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+
+        </table>
+
+        <table tableName="IMAdmin_Role"
+               domainObjectName="IMAdmin_Role"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+
+        </table>
+
+        <table tableName="IMRole"
+               domainObjectName="IMRole"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+
+        </table>
+
+        <table tableName="IMPower"
+               domainObjectName="IMPower"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+
+        </table>
+
 
     </context>
 </generatorConfiguration>
