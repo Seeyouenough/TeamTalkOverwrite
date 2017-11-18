@@ -9,6 +9,7 @@
 					<i class="fa fa-align-justify"></i>
 				</div>
 			</el-col>
+
 			<el-col :span="4" class="userinfo">
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
@@ -23,24 +24,29 @@
 				</el-dropdown>
 			</el-col>
 		</el-col>
+
+   
 		<el-col :span="24" class="main">
-			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
-			
+			<aside >
                 <!--导航菜单-->
 				<transition v-on:enter="menu_enter" v-on:leave="menu_leave">     
-				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
-					 unique-opened router v-show="!collapsed">
+				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect" unique-opened router v-show="!collapsed">
+
 					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
+						
 						<el-submenu :index="index+''" v-if="!item.leaf">
-							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
+							<template slot="title">
+								<i :class="item.iconCls"></i>{{item.name}}</template>
 							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
 						</el-submenu>
-						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
-					    
+
+						<el-menu-item v-if="item.leaf" :index="item.path" :route="{name:item.name}">
+						  <i :class="item.iconCls"></i>{{item.name}}</el-menu-item>
+
 					</template>
+
 				</el-menu>
 				</transition>
-
 
 				<!--导航菜单-折叠后-->
 				<ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
@@ -58,7 +64,9 @@
 						</template>
 					</li>
 				</ul>
+
 			</aside>
+		
 			
             <!-- 显示所有界面 -->
             <section class="content-container">
@@ -67,7 +75,7 @@
                     <el-col :span="24" class="breadcrumb-container">
                         <strong class="title">{{$route.name}}</strong>
                         <el-breadcrumb separator="/" class="breadcrumb-inner">
-                            <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+                            <el-breadcrumb-item v-for="(item,index) in $route.matched" :key="item.path">
                                 {{ item.name }}
                             </el-breadcrumb-item>
                         </el-breadcrumb>
@@ -119,9 +127,12 @@
   
     import {modifyRequest } from '../api/api';
 
+
 	export default {
 		data() {
 			return {
+                nodes: this.$router.options.routes,
+
 				sysName:'TeamTalk',
 				collapsed:false,
 				sysUserName: '',
@@ -162,6 +173,17 @@
 				}	
 			}
 		},
+		created() {
+		//这里没有直接使用this.$router.options.routes，是因为addRoute的路由规则，在这里this.$router.options.routes获取不到
+		//有兴趣的可以看一下源码，是为什么获取不到，但是却又有规则了 
+		//另外在开发的时候，可能由于是热部署，也会不断重复的给nodes添加元素，造成导航条有重复的，简单解决，可以设置一个开关
+		let isLoadNodes = sessionStorage.getItem('isLoadNodes')
+		if (!isLoadNodes) {
+			let data = JSON.parse(sessionStorage.getItem('routers'))
+			this.nodes.push(...data)
+			sessionStorage.setItem('isLoadNodes', 'true')
+		}
+	},
 		methods: {
             menu_enter:function(el,done){
 

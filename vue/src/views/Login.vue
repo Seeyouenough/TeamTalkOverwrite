@@ -24,7 +24,11 @@
 
 <script>
   import {loginRequest} from '../api/api';
+  import menus from '../Menus';
+  import MenuUtils from '@/utils/MenuUtils'
   //import NProgress from 'nprogress'
+
+  var routers = [];
   export default {
     data() {
       return {
@@ -47,6 +51,10 @@
       };
     },
     methods: {
+      login(data){
+        sessionStorage.setItem('routers',JSON.stringify(data));
+        MenuUtils(routers,data);
+      },
       goRegister(){
           this.$router.push({ path: '/add' });
       },
@@ -75,9 +83,12 @@
                   type: 'warning'
                  });
               } else {
+                   
+                   this.login(JSON.parse(data.data).menus);
+                   this.$router.addRoutes(routers);    
                    sessionStorage.setItem('username', this.ruleForm2.username);
                    sessionStorage.setItem('userpassword', this.ruleForm2.checkPass);
-                   this.$router.push({ path: '/Member' });
+                   this.$router.push({ path: '/main' });
                    console.log('路由跳转'); 
               }
             });

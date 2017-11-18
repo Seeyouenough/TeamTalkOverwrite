@@ -10,6 +10,7 @@ import Vuex from 'vuex'
 //import NProgress from 'nprogress'
 //import 'nprogress/nprogress.css'
 import routes from './routes'
+import MenuUtils from '@/utils/MenuUtils'
 
 //Mock.bootstrap();
 import 'font-awesome/css/font-awesome.min.css'
@@ -23,17 +24,29 @@ Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
-//NProgress.configure({ showSpinner: false });
-
 const router = new VueRouter({
-  routes
+      routes
 })
+
+
+let data = JSON.parse(sessionStorage.getItem('routers'));
+if (data){
+  //这里是防止用户手动刷新页面，整个app要重新加载,动态新增的路由，会消失，所以我们重新add一次
+  let routes = []
+  MenuUtils(routes,data);
+  router.addRoutes(routes);
+  sessionStorage.removeItem('isLoadNodes');
+}
 
 router.beforeEach((to, from, next) => {
   //NProgress.start();
-  if (to.path == '/login') {
+let data = JSON.parse(sessionStorage.getItem('routers'));
+
+  if (!data&&to.path == '/login') {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('usernamepassword');
+    sessionStorage.removeItem('routers');
+    sessionStorage.removeItem('isLoadNodes');
   }
   if (to.path) {
     next()
@@ -49,9 +62,6 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-//router.afterEach(transition => {
-//NProgress.done();
-//});
 
 new Vue({
   //el: '#app',

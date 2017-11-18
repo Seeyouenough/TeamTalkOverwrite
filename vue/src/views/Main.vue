@@ -1,6 +1,6 @@
 <template>
 	<section>
-		main
+		这是主页
 	</section>
 </template>
 
