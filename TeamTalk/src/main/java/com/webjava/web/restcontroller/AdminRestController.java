@@ -57,7 +57,7 @@ public class AdminRestController {
         // Send the request using the stub
         System.out.println("Client sending request");
         AdminResponse adminResponse = stub.login(loginRequest);
-
+/*
         BufferedReader br = new BufferedReader( new InputStreamReader(new FileInputStream("D:\\working\\IDEAProject\\TeamTalkOverwrite\\TeamTalk\\Menus.json"),"UTF-8"));
         String str;
         String data;
@@ -67,12 +67,12 @@ public class AdminRestController {
 
         }
         System.out.println(strb);
-        data=strb.toString();
+        data=strb.toString();*/
 
 
         if(adminResponse.getStatusId()==0){
 
-            HttpUtils.setJsonBody(response,new ResponseInfo(0,"很好",data));
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"很好"));
 
         }else
         {

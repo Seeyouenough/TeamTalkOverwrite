@@ -53,11 +53,11 @@
            "iconCls": "el-icon-arrow-right",
            "leaf": false,
            "children": [
-               { 
-                   "path": "Discovery", 
+               {
+                   "path": "Discovery",
                    "component": "Discovery",
                    "leaf": true,
-                   "name": "系统设置" 
+                   "name": "系统设置"
                }
            ]
        },

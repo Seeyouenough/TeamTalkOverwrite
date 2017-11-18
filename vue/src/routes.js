@@ -35,14 +35,13 @@ let routes = [
         component: Home,
         name: '主页',
         iconCls: 'el-icon-arrow-right',//图标样式class
-        leaf: true,
+        leaf: false,
         children: [
             { 
                 path: '/main', 
                 component: Main, 
-                name: 'TeamTalk',
-                leaf: true, 
-                hidden: true }
+                name: 'TeamTalk主页',
+                leaf: true }
         ]
     },
     {

@@ -31,25 +31,15 @@
                 <!--导航菜单-->
 				<transition v-on:enter="menu_enter" v-on:leave="menu_leave">     
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect" unique-opened router v-show="!collapsed">
-
-					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-						
-						<el-submenu :index="index+''" v-if="!item.leaf">
-							<template slot="title">
-								<i :class="item.iconCls"></i>{{item.name}}</template>
-							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
-						</el-submenu>
-
-						<el-menu-item v-if="item.leaf" :index="item.path" :route="{name:item.name}">
-						  <i :class="item.iconCls"></i>{{item.name}}</el-menu-item>
-
-					</template>
-
+					<menu-tree :items="$router.options.routes"></menu-tree>
 				</el-menu>
 				</transition>
-
-				<!--导航菜单-折叠后-->
-				<ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
+		
+				<!--导航菜单-折叠后--> 
+				<!-- <collapsed-tree :items="$router.options.routes"></collapsed-tree>
+				  -->
+				
+				  <ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
 					<li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item">
 						<template v-if="!item.leaf">
 							<div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
@@ -63,11 +53,12 @@
 							</li>
 						</template>
 					</li>
-				</ul>
-
-			</aside>
-		
-			
+				  </ul> 
+			    
+				 
+                		
+		      </aside>
+				
             <!-- 显示所有界面 -->
             <section class="content-container">
                 <div class="grid-content bg-purple-light">
@@ -126,12 +117,13 @@
 <script>
   
     import {modifyRequest } from '../api/api';
-
+    import MenuTree from './MenuTree';
+    import CollapsedTree from './CollapsedTree'; 
 
 	export default {
 		data() {
 			return {
-                nodes: this.$router.options.routes,
+                items: this.$router.options.routes,
 
 				sysName:'TeamTalk',
 				collapsed:false,
@@ -176,11 +168,11 @@
 		created() {
 		//这里没有直接使用this.$router.options.routes，是因为addRoute的路由规则，在这里this.$router.options.routes获取不到
 		//有兴趣的可以看一下源码，是为什么获取不到，但是却又有规则了 
-		//另外在开发的时候，可能由于是热部署，也会不断重复的给nodes添加元素，造成导航条有重复的，简单解决，可以设置一个开关
+		//另外在开发的时候，可能由于是热部署，也会不断重复的给items添加元素，造成导航条有重复的，简单解决，可以设置一个开关
 		let isLoadNodes = sessionStorage.getItem('isLoadNodes')
 		if (!isLoadNodes) {
 			let data = JSON.parse(sessionStorage.getItem('routers'))
-			this.nodes.push(...data)
+			this.items.push(...data)
 			sessionStorage.setItem('isLoadNodes', 'true')
 		}
 	},
@@ -300,6 +292,7 @@
 				this.collapsed=!this.collapsed;
 			},
 			showMenu(i,status){
+				console.log('show show show '+i);
 				this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
 			}
 		},
@@ -313,6 +306,10 @@
 			this.sysUserAvatar = 'static/user.png' || '';
 
 
+		},
+		components: {
+			MenuTree,
+			CollapsedTree
 		}
 	}
 
@@ -389,9 +386,8 @@
 			aside {
 				flex:0 0 230px;
 				width: 230px;
-				// position: absolute;
-				// top: 0px;
-				// bottom: 0px;
+				overflow-y: auto;
+				&::-webkit-scrollbar {display:none};
 				.el-menu{
 					height: 100%;
 				}
@@ -399,6 +395,7 @@
 					width:60px;
 					.item{
 						position: relative;
+
 					}
 					.submenu{
 						position:absolute;
@@ -408,11 +405,12 @@
 						height:auto;
 						display:none;
 					}
-
 				}
 			}
+
 			.menu-collapsed{
 				flex:0 0 60px;
+				overflow: visible;
 				width: 60px;
 			}
 			.menu-expanded{

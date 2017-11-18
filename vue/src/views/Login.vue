@@ -84,7 +84,8 @@
                  });
               } else {
                    
-                   this.login(JSON.parse(data.data).menus);
+                   //this.login(JSON.parse(data.data).menus);
+                   this.login(menus);
                    this.$router.addRoutes(routers);    
                    sessionStorage.setItem('username', this.ruleForm2.username);
                    sessionStorage.setItem('userpassword', this.ruleForm2.checkPass);

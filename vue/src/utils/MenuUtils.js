@@ -10,6 +10,8 @@ function generaMenu(routers,data){
     let menu = Object.assign({},item)
     menu.component = Loading(menu.component)
    
+//    console.log(menu);
+
     if(!item.leaf){
       menu.children = []
       generaMenu(menu.children,item.children)
