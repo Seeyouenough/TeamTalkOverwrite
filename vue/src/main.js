@@ -42,7 +42,6 @@ router.beforeEach((to, from, next) => {
   //console.log("111111111111111"+to.path)
   //NProgress.start();
 let data = JSON.parse(sessionStorage.getItem('routers'));
-
   if (!data&&to.path == '/login') {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('usernamepassword');

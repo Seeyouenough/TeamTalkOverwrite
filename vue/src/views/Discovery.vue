@@ -30,7 +30,7 @@
 
 		
 			<el-table-column label="操作" width="150">
-				<template scope="scope">
+				<template slot-scope="scope">
 					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>
@@ -57,7 +57,7 @@
 
                 <el-form-item label="优先级" prop="itempriority">
 					<el-select v-model="editForm.itempriority" placeholder="请选择优先级" >
-						<el-option v-for="itemPriorityList in itemPriorityList" :label="itemPriorityList.name" :value="itemPriorityList.id" ></el-option>   
+						<el-option v-for="item in itemPriorityList" :label="item.name" :value="item.id" :key="item.id" ></el-option>   
 					</el-select>
 				</el-form-item>
 
@@ -83,7 +83,7 @@
 				<el-form-item label="优先级">
 
 					<el-select v-model="addForm.itempriority" placeholder="请选择优先级" >						                            
-                       <el-option v-for="itemPriorityList in itemPriorityList" :label="itemPriorityList.name" :value="itemPriorityList.id" ></el-option>   						
+                       <el-option v-for="item in itemPriorityList" :label="item.name" :value="item.id" :key="item.id"  ></el-option>   						
 					</el-select>
 				</el-form-item>
 				

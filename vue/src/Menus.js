@@ -3,8 +3,8 @@
     {
         "path": "/",
         "component": "Home",
-        "name": "用户管理",
-        "iconCls": "el-icon-arrow-right",
+        "name": "用户",
+        "iconCls": "el-icon-menu",
         "leaf": false,
         "children": [
             { 
@@ -19,6 +19,7 @@
       "path": '/example',
       "component": "Home",
       "redirect": 'noredirect',
+      "iconCls": "el-icon-circle-check",
       "name": '综合实例',
       "leaf": false,
       "icon": 'example',
@@ -28,8 +29,8 @@
           "component": 'example/table/index',
           "redirect": '/table',
           "leaf": false,
+          "iconCls": "el-icon-circle-check",
           "name": 'Table',
-          "icon": 'table',
           "children": [
             { 
                 "path": '/example/table/dynamictable', "component": 'example/table/dynamictable/index',  "name": '动态table', "leaf": true 
@@ -53,8 +54,8 @@
     {
         "path": "/",
         "component": "Home",
-        "name": "组织架构",
-        "iconCls": "el-icon-arrow-right",
+        "name": "架构",
+        "iconCls": "el-icon-message",
         "leaf": false,
         "children": [
             { 
@@ -68,8 +69,8 @@
     {
         "path": "/",
         "component": "Home",
-        "name": "群组管理",
-        "iconCls": "el-icon-arrow-right",
+        "name": "群组",
+        "iconCls": "el-icon-star-on",
         "leaf": false,
         "children": [
             { 
@@ -83,8 +84,8 @@
     {
         "path": "/",
         "component": "Home",
-        "name": "系统设置",
-        "iconCls": "el-icon-arrow-right",
+        "name": "系统",
+        "iconCls": "el-icon-setting",
         "leaf": false,
         "children": [
             { 
@@ -99,7 +100,7 @@
         "path": "/",
         "component": "Home",
         "name": "管理员权限设置",
-        "iconCls": "el-icon-arrow-right",
+        "iconCls": "el-icon-menu",
         "leaf": false,
         "children": [
             { 

@@ -29,7 +29,7 @@
 
 		
 			<el-table-column label="操作" width="150">
-				<template scope="scope">
+				<template slot-scope="scope">
 					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>
@@ -57,7 +57,7 @@
 				<el-form-item label="部门优先级"  label-width="100px" >
 
 					<el-select v-model="editForm.priority" placeholder="请选择部门优先级" >
-						<el-option v-for="priorityList in priorityList" :label="priorityList.name" :value="priorityList.id" ></el-option>   
+						<el-option v-for="item in priorityList" :label="item.name" :value="item.id" :key="item.id" ></el-option>   
 					</el-select>
 
 				</el-form-item>
@@ -66,7 +66,7 @@
 				<el-form-item label="父部门">
 <!-- 					<el-input  v-model="addForm.parentid"></el-input> -->                   
                    <el-select v-model="editForm.parentid" >
-					 <el-option v-for="departList in departList" :label="departList.name" :value="departList.id" ></el-option>   
+					 <el-option v-for="item in departList" :label="item.name" :value="item.id"  :key="item.id" ></el-option>   
 
 					</el-select>
 				</el-form-item>
@@ -89,7 +89,7 @@
 
 					<el-select v-model="addForm.priority" placeholder="请选择部门优先级">
 						 
-                        <el-option v-for="priorityList in priorityList" :label="priorityList.name" :value="priorityList.id" ></el-option>   
+                        <el-option v-for="item in priorityList" :label="item.name" :value="item.id" :key="item.id"  ></el-option>   
 						
 					</el-select>
 					<!-- <el-input v-model="addForm.priority" auto-complete="off"></el-input> -->			</el-form-item>
@@ -98,7 +98,7 @@
 				<el-form-item label="父部门">
 <!-- 					<el-input  v-model="addForm.parentid"></el-input> -->                   
                    <el-select v-model="addForm.parentid" placeholder="请选择父部门">
-					 <el-option v-for="departList in departList" :label="departList.name" :value="departList.id" ></el-option>   
+					 <el-option v-for="item in departList" :label="item.name" :value="item.id"  :key="item.id"></el-option>   
 
 					</el-select>
 				</el-form-item>

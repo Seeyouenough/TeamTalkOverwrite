@@ -45,7 +45,7 @@
 			</el-table-column>
 			
 			<el-table-column label="操作" width="200">
-				<template scope="scope">
+				<template slot-scope="scope">
 
 					<el-button size="small" @click="EditPassword(scope.$index, scope.row)">改密</el-button>
 
@@ -89,7 +89,7 @@
 				<el-form-item label="部门">
 					<!-- <el-input v-model="editForm.departid"></el-input> -->
 					<el-select v-model="editForm.departid" placeholder="请选择部门">
-					 <el-option v-for="departList in departList" :label="departList.name" :value="departList.id" ></el-option>  
+					 <el-option v-for="item in departList" :label="item.name" :value="item.id" :key="item.id" ></el-option>  
 					</el-select>
 				</el-form-item>
 
@@ -133,7 +133,7 @@
 				<el-form-item label="部门">
 					<!-- <el-input v-model="addForm.departid"></el-input> -->
 					<el-select v-model="addForm.departid" placeholder="请选择部门">
-					 <el-option v-for="departList in departList" :label="departList.name" :value="departList.id" ></el-option>   
+					 <el-option v-for="item in departList" :label="item.name" :value="item.id" :key="item.id" ></el-option>   
 					</el-select>
 				</el-form-item>
 

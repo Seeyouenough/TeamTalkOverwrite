@@ -86,16 +86,15 @@
                    
                    //this.login(JSON.parse(data.data).menus);
                    this.login(menus);
-                   this.$router.addRoutes(routers);    
+                   this.$router.push(routers);    
                    sessionStorage.setItem('username', this.ruleForm2.username);
                    sessionStorage.setItem('userpassword', this.ruleForm2.checkPass);
-                   this.$router.push({ path: '/main' });
-                   console.log('路由跳转'); 
+                   this.$router.push({ path: '/main' }); 
               }
             });
 
           } else {
-            console.log('error submit!!');
+//            console.log('error submit!!');
             return false;
           }
         });

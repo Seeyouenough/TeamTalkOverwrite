@@ -34,7 +34,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '主页',
-        iconCls: 'el-icon-arrow-right',//图标样式class
+        iconCls: 'el-icon-star-on',//图标样式class
         leaf: false,
         children: [
             { 
