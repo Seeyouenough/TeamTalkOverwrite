@@ -19,13 +19,13 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'roles'
+      'introduction'
     ])
   },
   created() {
-    if (this.roles.indexOf('admin') >= 0) {
+    /*if (this.introduction.indexOf('admin') >= 0) {
       return
-    }
+    }*/
     this.currentRole = 'editorDashboard'
   }
 }

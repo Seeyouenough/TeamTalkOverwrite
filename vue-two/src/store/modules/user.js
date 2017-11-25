@@ -10,7 +10,6 @@ const user = {
     name: '',
     avatar: '',
     introduction: '',
-    roles: [],
     setting: {
       articlePlatform: []
     }
@@ -37,9 +36,6 @@ const user = {
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
-    },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
     }
   },
 
@@ -68,7 +64,6 @@ const user = {
           if (!response.data.data) { // 由于mockjs 不支持自定义状态码只能这样hack
             reject('error')
           }
-
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
@@ -100,7 +95,7 @@ const user = {
         removeToken()
         resolve()
       })
-    },
+    }
 
     /*// 动态修改权限
     ChangeRole({ commit }, role) {

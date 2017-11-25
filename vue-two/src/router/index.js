@@ -17,22 +17,22 @@ import Layout from '../views/layout/Layout'
 * meta : { role: ['admin'] }  will control the page role
 **/
 export const constantRouterMap = [
-    { path: '/login', component: _import('login/index'), hidden: true },
-    { path: '/authredirect', component: _import('login/authredirect'), hidden: true },
-    { path: '/404', component: _import('errorPage/404'), hidden: true },
-    { path: '/401', component: _import('errorPage/401'), hidden: true },
+    { path: 'login/index', component: _import('login/index'), hidden: true },
+    { path: 'login/authredirect', component: _import('login/authredirect'), hidden: true },
+    { path: 'errorPage/404', component: _import('errorPage/404'), hidden: true },
+    { path: 'errorPage/401', component: _import('errorPage/401'), hidden: true },
   {
     path: '/',
-    component: Layout,
-    redirect: '/dashboard',
+    component: _import('layout/Layout'),
+    //redirect: '/dashboard',
     name: '首页',
     hidden: true,
     children: [{ path: 'dashboard', component: _import('dashboard/index') }]
   },
   {
     path: '/introduction',
-    component: Layout,
-    redirect: '/introduction/index',
+    component: _import('layout/Layout'),
+    ///redirect: '/introduction/index',
     icon: 'people',
     noDropdown: true,
     children: [{ path: 'index', component: _import('introduction/index'), name: '简述' }]
@@ -50,11 +50,11 @@ export default new Router({
 //添加角色,一行,一角色对应多权限,访问角色时,将id为该角色的所有权限找出,放到一个数组中
 //然后将该数组返回给用户,同时一个用户对应多个角色,将所有的权限判断之后,全部放在一
 //个数组中,返回它
-export const asyncRouterMap = [
+/*export const asyncRouterMap = [
   {
     path: '/permission',
-    component: Layout,
-    redirect: '/permission/index',
+    component: _import('layout/Layout'),
+    //redirect: '/permission/index',
     name: '权限测试',
     icon: 'password',
     meta: { role: ['admin'] },
@@ -63,15 +63,15 @@ export const asyncRouterMap = [
   },
   {
     path: '/example',
-    component: Layout,
-    redirect: 'noredirect',
+    component: _import('layout/Layout'),
+    //redirect: 'noredirect',
     name: '综合实例',
     icon: 'example',
     children: [
       {
         path: '/example/table',
         component: _import('example/table/index'),
-        redirect: '/example/table/table',
+        //redirect: '/example/table/table',
         name: 'Table',
         icon: 'table',
         children: [
@@ -88,8 +88,8 @@ export const asyncRouterMap = [
   },
   {
     path: '/member',
-    component: Layout,
-    redirect: 'noredirect',
+    component: _import('layout/Layout'),
+    //redirect: 'noredirect',
     icon: 'email',
     noDropdown: true,
     meta: { role: ['admin','member'] },
@@ -99,8 +99,8 @@ export const asyncRouterMap = [
   },
   {
     path: '/depart',
-    component: Layout,
-    redirect: 'noredirect',
+    component: _import('layout/Layout'),
+    //redirect: 'noredirect',
     icon: 'star',
     noDropdown: true,
     meta: { role: ['admin','depart'] },
@@ -110,8 +110,8 @@ export const asyncRouterMap = [
   },
   {
     path: '/group',
-    component: Layout,
-    redirect: 'noredirect',
+    component: _import('layout/Layout'),
+    //redirect: 'noredirect',
     icon: 'drag',
     noDropdown: true,
     meta: { role: ['admin','group'] },
@@ -121,8 +121,8 @@ export const asyncRouterMap = [
   },
   {
     path: '/discovery',
-    component: Layout,
-    redirect: 'noredirect',
+    component: _import('layout/Layout'),
+    //redirect: 'noredirect',
     icon: 'example',
     noDropdown: true,
     meta: { role: ['admin','discovery'] },
@@ -132,8 +132,8 @@ export const asyncRouterMap = [
   },
   {
     path: '/management',
-    component: Layout,
-    redirect: 'noredirect',
+    component: _import('layout/Layout'),
+    //redirect: 'noredirect',
     name: '管理员权限设置',
     icon: 'lock',
     meta: { role: ['admin'] },
@@ -144,4 +144,4 @@ export const asyncRouterMap = [
     ]
   },
   { path: '*', redirect: '/404', hidden: true }
-]
+]*/

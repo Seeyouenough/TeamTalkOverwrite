@@ -2,7 +2,7 @@
   <div class="dashboard-editor-container">
     <div class=" clearfix">
       <pan-thumb style="float: left" :image="avatar"> 你的权限:
-        <span class="pan-info-roles" :key='item' v-for="item in roles">{{item}}</span>
+        <span class="pan-info-roles" :key='item' v-for="item in introduction">{{item}}</span>
       </pan-thumb>
       <github></github>
       <div class="info-container">
@@ -36,7 +36,7 @@ export default {
     ...mapGetters([
       'name',
       'avatar',
-      'roles',
+      'introduction',
       'introduction'
     ])
   }

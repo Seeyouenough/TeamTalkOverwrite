@@ -27,7 +27,7 @@
 				<el-card class="box-card">
 					<div slot="header" class="box-card-header">
 						<pan-thumb class="panThumb" :image="avatar"> 你的权限:
-							<span class="pan-info-roles" :key='item' v-for="item in roles">{{item}}</span>
+							<span class="pan-info-roles" :key='item' v-for="item in introduction">{{item}}</span>
 						</pan-thumb>
 					</div>
 					<span class="display_name">{{name}}</span>
@@ -90,7 +90,7 @@ export default {
     ...mapGetters([
       'name',
       'avatar',
-      'roles'
+      'introduction'
     ])
   }
 }
