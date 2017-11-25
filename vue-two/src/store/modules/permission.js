@@ -5,9 +5,9 @@ import { asyncRouterMap, constantRouterMap } from '@/router'
  * @param roles
  * @param route
  */
+ 
 function hasPermission(roles, route) {
   if (route.meta && route.meta.role) {
-    console.log("这个是"+route.meta.role)
    /* return roles.some(role => route.meta.role.indexOf(role) >= 0)*/
     return route.meta.role.some(role => roles.indexOf(role)>=0)
   } else {
@@ -55,6 +55,7 @@ const permission = {
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         }
+        console.log(accessedRouters)
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })

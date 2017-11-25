@@ -51,18 +51,6 @@ const user = {
         loginByUsername(username, userInfo.password).then(response => {
           var data =JSON.parse(response.data.data) 
 
-
-          /*var zz
-          console.log(data.role)
-          zz=data.role.indexOf('admin')
-          console.log(zz)*/
-
-          
-         /* let formatRole = []
-          formatRole=JSON.stringify(data.role)
-          formatRole=formatRole.replace(/[\\]/g,'');
-          formatRole=JSON.parse(formatRole)*/
-
           setToken(data.token)
           commit('SET_TOKEN', data.token)
           resolve()
@@ -80,7 +68,7 @@ const user = {
           if (!response.data.data) { // 由于mockjs 不支持自定义状态码只能这样hack
             reject('error')
           }
-          commit('SET_ROLES', data.role)
+
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
@@ -91,12 +79,12 @@ const user = {
       })
     },
 
+
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
           removeToken()
           resolve()
         }).catch(error => {
@@ -114,7 +102,7 @@ const user = {
       })
     },
 
-    // 动态修改权限
+    /*// 动态修改权限
     ChangeRole({ commit }, role) {
       return new Promise(resolve => {
         commit('SET_TOKEN', role)
@@ -129,7 +117,7 @@ const user = {
         })
       })
     }
-  }
+*/  }
 }
 
 export default user
