@@ -17,26 +17,28 @@ import Layout from '../views/layout/Layout'
 * meta : { role: ['admin'] }  will control the page role
 **/
 export const constantRouterMap = [
-    { path: 'login/index', component: _import('login/index'), hidden: true },
-    { path: 'login/authredirect', component: _import('login/authredirect'), hidden: true },
-    { path: 'errorPage/404', component: _import('errorPage/404'), hidden: true },
-    { path: 'errorPage/401', component: _import('errorPage/401'), hidden: true },
+  { path: '/login', component: _import('/login/index'), hidden: true },
+  { path: '/authredirect', component: _import('/login/authredirect'), hidden: true },
+  { path: '/404', component: _import('/errorPage/404'), hidden: true },
+  { path: '/401', component: _import('/errorPage/401'), hidden: true },
   {
     path: '/',
-    component: _import('layout/Layout'),
-    //redirect: '/dashboard',
+    component: _import('/layout/Layout'),
+    redirect: '/dashboard/index',
     name: '首页',
     hidden: true,
-    children: [{ path: 'dashboard', component: _import('dashboard/index') }]
+    children: [{ path: '/dashboard/index', component: _import('/dashboard/index') }]
   },
   {
-    path: '/introduction',
-    component: _import('layout/Layout'),
-    ///redirect: '/introduction/index',
+    path: '/layout/Layout',
+    component: _import('/layout/Layout'),
+    //redirect: '/introduction/index',
     icon: 'people',
     noDropdown: true,
-    children: [{ path: 'index', component: _import('introduction/index'), name: '简述' }]
-  }
+    children: [{ path: '/introduction/index', component: _import('/introduction/index'), name: '简述' }]
+  },
+  { path: '*', redirect: '/404', hidden: true }
+
 ]
 
 export default new Router({

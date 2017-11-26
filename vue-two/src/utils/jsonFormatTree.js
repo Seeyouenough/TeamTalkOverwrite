@@ -1,4 +1,5 @@
 
+
 export default(routers_ex,routers_data) => {
       //let routers =JSON.parse(routers_data)
       
@@ -17,11 +18,16 @@ export default(routers_ex,routers_data) => {
                   id:item.id,
                   pid:item.pid,
                   name:item.name,
-                  path:item.component,
+                  path:item.path,
+                  com:item.path,
                   hidden: false,
-                  iconCls:"el-icon-menu",
+                  icon:"star",
                   leaf:true,
               }
+              if(router_info.pid == 0){
+                router_info.path="/"+router_info.path
+              }
+              
               jsonData.push(router_info)
       });
 
@@ -40,23 +46,27 @@ function transData(r,a, idStr, pidStr, chindrenStr){
     }    
     for(; j < len; j++){    
         var aVal = a[j], hashVP = hash[aVal[pid]];
-
+        
         if(hashVP){    
 
             if(!hashVP[children]){
-                hashVP[children] = [];
-                hashVP.leaf = false;    
+                hashVP[children] = []
+                hashVP.leaf = false 
             }
-            
-            
+
+            delete aVal.id
             delete aVal.pid
 
             hashVP[children].push(aVal);
 
         }else{
+            /*if(aVal.children.length == 1){
+              aVal.leaf = false
+              console.log(aVal)
+            }*/
 
-            
-            delete aVal.pid    
+            delete aVal.id
+            delete aVal.pid   
             r.push(aVal);   
 
         }    

@@ -195,7 +195,6 @@
                    
                      let cp=this.departList[j];
                      if(row.parentid==cp.id){
-                     	//console.log("名字是"+cp.name);
                      	return cp.name;
                      }
 

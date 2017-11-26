@@ -15,6 +15,7 @@ const getRoutes = {
         SET_ROUTERS: (state, routers) => {
           state.addRouters = routers
           state.routers = constantRouterMap.concat(routers)
+          //state.routers = routers
         }
     },
     actions:{
@@ -23,12 +24,10 @@ const getRoutes = {
             
             let routes_ex=[]
             jsonFormatTree(routes_ex,menu)
-          
-            MenuUtils(routes_ex)
-
+            MenuUtils(routes_ex) 
+         
             commit('SET_ROUTERS', routes_ex)
-
-            console.log("完成")
+            
             resolve()
            /* getRoute(state.token).then(response => {
               let {code, msg, data}=response.data

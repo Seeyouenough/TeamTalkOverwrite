@@ -36,7 +36,6 @@ export default {
     ...mapGetters([
       'name',
       'avatar',
-      'introduction',
       'introduction'
     ])
   }
