@@ -19,7 +19,7 @@ public class Application {
 
         // Build server
         io.grpc.Server server = ServerBuilder.forPort(SERVER_PORT)
-                .addService(new AdminServerImpl(service))
+                .addService(new ManagerServerImpl(service))
                 .addService(new DiscoveryServerImpl(service))
                 .addService(new UserServerImpl(service))
                 .addService(new GroupServerImpl(service))

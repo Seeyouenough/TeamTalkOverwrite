@@ -1,4 +1,11 @@
+.DS_Store
 node_modules/
 dist/
+static/ckeditor
+gifs/
 npm-debug.log
-.gitignore
+test/unit/coverage
+test/e2e/reports
+selenium-debug.log
+.idea
+package-lock.json

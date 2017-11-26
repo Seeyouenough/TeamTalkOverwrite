@@ -73,8 +73,8 @@
 
         </javaClientGenerator>
 
-        <table tableName="IMAdmin"
-               domainObjectName="IMAdmin"
+        <table tableName="manager_info"
+               domainObjectName="manager_info"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
@@ -83,8 +83,8 @@
 
         </table>
 
-        <table tableName="IMAdmin_Power"
-               domainObjectName="IMAdmin_Power"
+        <table tableName="role_info"
+               domainObjectName="role_info"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
@@ -93,8 +93,9 @@
 
         </table>
 
-        <table tableName="IMAdmin_Role"
-               domainObjectName="IMAdmin_Role"
+
+        <table tableName="manager_role_info"
+               domainObjectName="manager_info"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
@@ -103,8 +104,8 @@
 
         </table>
 
-        <table tableName="IMRole"
-               domainObjectName="IMRole"
+        <table tableName="power_info"
+               domainObjectName="power_info"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
@@ -113,8 +114,9 @@
 
         </table>
 
-        <table tableName="IMPower"
-               domainObjectName="IMPower"
+
+        <table tableName="role_power_info"
+               domainObjectName="role_power_info"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"

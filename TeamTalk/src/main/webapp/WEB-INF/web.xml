@@ -54,6 +54,10 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
+  <!-- 设置Session的有效时间:以分钟为单位-->
+  <session-config>
+    <session-timeout>15</session-timeout>
+  </session-config>
 
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

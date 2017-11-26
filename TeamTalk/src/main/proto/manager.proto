@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package com.manager.grpc;
+
+message Manager{
+    int32 id=1;
+
+    string username=2;
+
+    string password=3;
+
+    int32 role_id=4;
+
+    string role=5;
+
+    string token=6;
+
+    string introduction=7;
+
+    string avatar=8;
+
+    int32 status=12;
+
+    string created=13;
+
+    string updated=14;
+}
+
+message ManagerRequest {
+    int32 id=1;
+
+    string username=2;
+
+    string password=3;
+
+    string token=4;
+
+    repeated Manager manager=5;
+
+}
+
+message ManagerResponse {
+    int32 id=1;
+
+    string username=2;
+
+    string password=3;
+
+    int32 status_id=4;
+
+    string token=6;
+
+    repeated Manager manager=5;
+}
+
+service ManagerService{
+    rpc login(ManagerRequest) returns (ManagerResponse);
+    rpc addManager(ManagerRequest) returns (ManagerResponse);
+    rpc modifyPassword(ManagerRequest) returns (ManagerResponse);
+    rpc removeManager(ManagerRequest) returns (ManagerResponse);
+    rpc listManager(ManagerRequest) returns (ManagerResponse);
+    rpc getInfo(ManagerRequest) returns (ManagerResponse);
+}
