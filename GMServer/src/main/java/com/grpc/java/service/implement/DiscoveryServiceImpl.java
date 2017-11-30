@@ -17,6 +17,7 @@ public class DiscoveryServiceImpl  implements IDiscoveryService {
     @Resource
     private IMDiscoveryMapper discoveryMapper;
 
+    @Override
     public IMDiscovery getDiscoveryById(Integer userId) {
         return this.discoveryMapper.selectDiscoveryById(userId);
     }

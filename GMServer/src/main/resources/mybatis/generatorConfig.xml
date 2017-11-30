@@ -73,7 +73,7 @@
 
         </javaClientGenerator>
 
-        <table tableName="manager_info"
+        <!--<table tableName="manager_info"
                domainObjectName="manager_info"
                enableCountByExample="false"
                enableUpdateByExample="false"
@@ -81,49 +81,7 @@
                enableSelectByExample="false"
                selectByExampleQueryId="false">
 
-        </table>
-
-        <table tableName="role_info"
-               domainObjectName="role_info"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false">
-
-        </table>
-
-
-        <table tableName="manager_role_info"
-               domainObjectName="manager_info"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false">
-
-        </table>
-
-        <table tableName="power_info"
-               domainObjectName="power_info"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false">
-
-        </table>
-
-
-        <table tableName="role_power_info"
-               domainObjectName="role_power_info"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false">
-
-        </table>
+        </table>-->
 
 
     </context>

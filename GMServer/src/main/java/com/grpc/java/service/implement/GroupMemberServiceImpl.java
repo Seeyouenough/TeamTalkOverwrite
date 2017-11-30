@@ -18,14 +18,17 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     @Resource
     private IMGroupMemberMapper groupMemberMapper;
 
+    @Override
     public IMGroupMember getGroupMemberById(Integer Id) {
         return groupMemberMapper.selectGroupMemberById(Id);
     }
 
+    @Override
     public IMGroupMember getGroupMemberByGroupId(Integer groupId) {
        return groupMemberMapper.selectGroupMemberByGroupId(groupId);
     }
 
+    @Override
     public IMGroupMember getGroupMemberByUserId(Integer userId) {
 
         return groupMemberMapper.selectGroupMemberByUserId(userId);

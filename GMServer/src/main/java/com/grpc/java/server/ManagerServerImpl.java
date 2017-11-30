@@ -1,7 +1,7 @@
 package com.grpc.java.server;
 
-import com.grpc.java.kernel.entity.IMManager;
-import com.grpc.java.service.IManagerService;
+import com.grpc.java.kernel.entity.manager_info;
+import com.grpc.java.service.ManagerService;
 import com.grpc.java.utils.EncryptHelper;
 import com.manager.grpc.Manager;
 import com.manager.grpc.ManagerRequest;
@@ -9,16 +9,20 @@ import com.manager.grpc.ManagerResponse;
 import com.manager.grpc.ManagerServiceGrpc;
 import io.grpc.stub.StreamObserver;
 
+import java.util.List;
+
 /**
  * Created by wx on 2017/11/8.
  */
 
 public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase {
-    private IManagerService managerService;
+    private ManagerService managerService;
 
     public ManagerServerImpl(BeanContainer service) {
         this.managerService= service.managerService;
     }
+
+
     @Override
     public void login(ManagerRequest request, StreamObserver<ManagerResponse> responseStreamObserver){
         System.out.println("Received request: " + request);
@@ -27,20 +31,19 @@ public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase
         String password = request.getPassword();
 
         password = EncryptHelper.encodeByMD5(password);
-        IMManager manager = this.managerService.getName(username);
+        manager_info manager = this.managerService.getName(username);
         if (manager != null && manager.getPassword().equals(password))
         {
             System.out.print("okok");
             Manager.Builder aa=Manager.newBuilder();
-            aa.setId(manager.getId());
+            aa.setId(manager.getManagerId());
             aa.setUsername(manager.getUsername());
-            aa.setRole(manager.getRole());
             aa.setAvatar(manager.getAvatar());
             aa.setIntroduction(manager.getIntroduction());
             aa.setToken(manager.getToken());
             ManagerResponse.Builder builder=ManagerResponse.newBuilder();
             builder.addManager(aa);
-            ManagerResponse response =builder.setStatusId(0)
+            ManagerResponse response =builder
                     .setStatusId(0)
                     .build();
             responseStreamObserver.onNext(response);
@@ -62,12 +65,11 @@ public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase
 
         String token =request.getToken();
 
-        IMManager manager=this.managerService.getToken(token);
+        manager_info manager=this.managerService.getToken(token);
         if(manager!=null){
             Manager.Builder aa=Manager.newBuilder();
-            aa.setId(manager.getId());
+            aa.setId(manager.getManagerId());
             aa.setUsername(manager.getUsername());
-            aa.setRole(manager.getRole());
             aa.setAvatar(manager.getAvatar());
             aa.setIntroduction(manager.getIntroduction());
             aa.setToken(manager.getToken());
@@ -85,6 +87,24 @@ public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase
     }
 
     @Override
+    public void listManager(ManagerRequest request,StreamObserver<ManagerResponse> responseStreamObserver){
+        List<manager_info> manager = managerService.getAll();
+
+        ManagerResponse.Builder builder=ManagerResponse.newBuilder();
+
+        if(manager.size()>0){
+            for(int i=0; i<manager.size(); i++){
+                Manager.Builder bu=Manager.newBuilder();
+                bu.setId(manager.get(i).getManagerId());
+                bu.setUsername(manager.get(i).getUsername());
+                bu.setIntroduction(manager.get(i).getIntroduction());
+                
+            }
+        }
+
+    }
+
+    @Override
     public void modifyPassword(ManagerRequest request, StreamObserver<ManagerResponse> responseStreamObserver){
 
         System.out.println("Received request: " + request);
@@ -93,7 +113,7 @@ public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase
         String pwd = request.getPassword();
 
         pwd = EncryptHelper.encodeByMD5(pwd);
-        IMManager user = this.managerService.getName(uname);
+        manager_info user = this.managerService.getName(uname);
         if(user!=null){
             user.setPassword(pwd);
             this.managerService.updatePassword(user);
@@ -118,9 +138,9 @@ public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase
     public void addManager(ManagerRequest request, StreamObserver<ManagerResponse> responseStreamObserver){
 
         String name=request.getUsername();
-        IMManager user=new IMManager();
+        manager_info user=new manager_info();
 
-        IMManager existUser =this.managerService.getName(name);
+        manager_info existUser =this.managerService.getName(name);
         if(existUser !=null){
             System.out.println("内容已存在");
             ManagerResponse response = ManagerResponse.newBuilder()

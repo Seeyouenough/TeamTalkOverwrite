@@ -27,11 +27,5 @@ export function getUserInfo(token) {
   })
 }
 
-export function getRoute(token){
-  return fetch({
-     url: '/getRoute',
-     method: 'get',
-     params: { token }
-  })
-}
+
 

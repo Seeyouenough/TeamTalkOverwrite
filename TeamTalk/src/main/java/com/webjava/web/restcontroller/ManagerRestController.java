@@ -33,7 +33,6 @@ public class ManagerRestController {
     private static final String HOST = "localhost";
     private static final int PORT = 50051;
 
-
     @RequestMapping(value="/login", method= RequestMethod.POST)
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -71,11 +70,12 @@ public class ManagerRestController {
 
     }
 
-    @RequestMapping(value = "logout",method = RequestMethod.POST)
+    @RequestMapping(value = "/logout",method = RequestMethod.POST)
     public void logout(HttpServletRequest request,HttpServletResponse response)
     {
         HttpUtils.setJsonBody(response ,new ResponseInfo(0,"success"));
     }
+
     @RequestMapping(value = "/getInfo",method = RequestMethod.GET)
     public void getInfo(HttpServletRequest request,HttpServletResponse response) throws InvalidProtocolBufferException {
           String token = request.getParameter("token");
@@ -108,7 +108,7 @@ public class ManagerRestController {
 
     }
 
-    @RequestMapping(value="/modify", method= RequestMethod.POST)
+    @RequestMapping(value="/manager/modify", method= RequestMethod.POST)
     public void modify(HttpServletRequest request, HttpServletResponse response){
 
         String strData=HttpUtils.getJsonBody(request);
@@ -143,7 +143,7 @@ public class ManagerRestController {
 
     }
 
-    @RequestMapping(value = "/admin/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/manager/add",method = RequestMethod.POST)
     public void addManager(HttpServletRequest request, HttpServletResponse response){
 
         String  strJson= HttpUtils.getJsonBody(request);
@@ -177,6 +177,11 @@ public class ManagerRestController {
             HttpUtils.setJsonBody(response,new ResponseInfo(1,"内容存在"));
         }
 
+
+    }
+
+    @RequestMapping(value = "/manager/list", method = RequestMethod.GET)
+    public void listManager(HttpServletRequest request,HttpServletResponse response){
 
     }
 

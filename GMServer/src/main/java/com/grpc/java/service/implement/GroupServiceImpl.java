@@ -17,6 +17,7 @@ public class GroupServiceImpl implements IGroupService {
     @Resource
     private IMGroupMapper groupMapper;
 
+    @Override
     public IMGroup getGroupById(Integer userId) {
        return groupMapper.selectGroupById(userId);
     }

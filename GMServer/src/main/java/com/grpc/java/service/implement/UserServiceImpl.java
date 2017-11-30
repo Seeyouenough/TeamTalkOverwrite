@@ -17,6 +17,7 @@ public class UserServiceImpl implements IUserService {
     @Resource
     private IMUserMapper userMapper;
 
+    @Override
     public IMUser getUserById(Integer userId) {
         return userMapper.selectUserById(userId);
     }

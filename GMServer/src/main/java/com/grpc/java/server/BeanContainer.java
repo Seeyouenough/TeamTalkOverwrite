@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 @Service("beanService")
 public class BeanContainer {
     @Resource
-    public IManagerService managerService;
+    public ManagerService managerService;
 
     @Resource
     public IDepartService departService;
@@ -25,6 +25,16 @@ public class BeanContainer {
     @Resource
     public IUserService userService;
 
+    @Resource
+    public PowerService powerService;
 
+    @Resource
+    public Role_PowerService  role_powerService;
+
+    @Resource
+    public RoleService roleService;
+
+    @Resource
+    public Manager_RoleService manager_roleService;
 
 }

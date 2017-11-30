@@ -5,16 +5,17 @@ export default(routers_ex,routers_data) => {
       
       let jsonData=[]
       routers_data.forEach(item =>{
-              /*let router_info={
+              let router_info={
                   id:item.power_id,
                   pid:item.parent_id,
                   name:item.power_name,
                   path:item.power_url,
+                  com:item.power_url,
                   hidden: false,
-                  iconCls:"el-icon-menu",
+                  icon:"star",
                   leaf:true,
-              }*/
-              let router_info={
+              }
+              /*let router_info={
                   id:item.id,
                   pid:item.pid,
                   name:item.name,
@@ -23,10 +24,10 @@ export default(routers_ex,routers_data) => {
                   hidden: false,
                   icon:"star",
                   leaf:true,
-              }
-              if(router_info.pid == 0){
+              }*/
+              /*if(router_info.pid == 0){
                 router_info.path="/"+router_info.path
-              }
+              }*/
               
               jsonData.push(router_info)
       });

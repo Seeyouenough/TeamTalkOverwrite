@@ -17,7 +17,7 @@ public class DepartServiceImpl implements IDepartService {
     @Resource
     private IMDepartMapper departMapper;
 
-
+    @Override
     public IMDepart getDepartById(Integer userId) {
 
         return this.departMapper.selectDepartById(userId);

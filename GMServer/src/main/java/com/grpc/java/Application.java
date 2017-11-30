@@ -24,6 +24,8 @@ public class Application {
                 .addService(new UserServerImpl(service))
                 .addService(new GroupServerImpl(service))
                 .addService(new DepartServerImpl(service))
+                .addService(new PowerServerImpl(service))
+                .addService(new RoleServerImpl(service))
                 .build();
 
         // Start server

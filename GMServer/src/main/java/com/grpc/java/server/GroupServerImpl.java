@@ -21,8 +21,6 @@ public class GroupServerImpl extends GroupServiceGrpc.GroupServiceImplBase {
 
 
 
-
-
         responseStreamObserver.onCompleted();
     }
 
