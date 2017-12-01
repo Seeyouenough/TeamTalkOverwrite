@@ -89,7 +89,7 @@ public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase
     @Override
     public void listManager(ManagerRequest request,StreamObserver<ManagerResponse> responseStreamObserver){
         List<manager_info> manager = managerService.getAll();
-
+        int status = -1;
         ManagerResponse.Builder builder=ManagerResponse.newBuilder();
 
         if(manager.size()>0){
@@ -98,10 +98,17 @@ public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase
                 bu.setId(manager.get(i).getManagerId());
                 bu.setUsername(manager.get(i).getUsername());
                 bu.setIntroduction(manager.get(i).getIntroduction());
-                
+                builder.addManager(bu);
             }
+            status =0;
+        }
+        else {
+            status =1;
         }
 
+        ManagerResponse response=builder.setStatusId(status).build();
+        responseStreamObserver.onNext(response);
+        responseStreamObserver.onCompleted();
     }
 
     @Override
@@ -160,6 +167,12 @@ public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase
         }
 
         responseStreamObserver.onCompleted();
+    }
+
+    @Override
+    public void removeManager(ManagerRequest request,StreamObserver<ManagerResponse> responseStreamObserver)
+    {
+
     }
 
 }

@@ -34,8 +34,7 @@ const getRoutes = {
             getRoute(token).then(response => {
               let {code, msg, data}=response.data
               let power_router=JSON.parse(data).power
-              console.log("1111")
-              console.log(power_router)
+            
               let routes_ex=[]
               jsonFormatTree(routes_ex,power_router)
 

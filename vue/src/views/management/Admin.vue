@@ -4,9 +4,7 @@
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">
                 <el-form-item>
-                <el-form-item>
                     <el-button type="primary" @click="handleAdd">新增</el-button>
-                </el-form-item>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -19,21 +17,23 @@
             <el-table-column type="index" label="ID" width="60">
             </el-table-column>
 
-            <el-table-column prop="name" label="姓名" width="100" sortable>
+            <el-table-column prop="username" label="姓名" min-width="120" sortable>
             </el-table-column> 
             
-            <el-table-column prop="introduction" label="介绍" width="100" sortable>
+            <el-table-column prop="introduction" label="介绍" min-width="150" sortable>
             </el-table-column> 
             
-            <el-table-column label="操作" width="200">
+            <el-table-column label="操作" width="270">
                 <template scope="scope">
 
                     <el-button size="small" @click="EditPassword(scope.$index, scope.row)">改密</el-button>
 
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                   
+                    <el-button size="small" @click="powerEdit(scope.$index, scope.row)">权限</el-button>
                     <!-- <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button> -->
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+
 
                 </template>
             </el-table-column>
@@ -48,13 +48,13 @@
 
         <!--编辑界面-->
         <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
-            <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="姓名" prop="name">
-                    <el-input v-model="editForm.name" ></el-input>
+            <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
+                <el-form-item label="姓名" prop="username">
+                    <el-input v-model="editForm.username" ></el-input>
                 </el-form-item>
                 
-                <el-form-item label="介绍" prop="name">
-                    <el-input v-model="editForm.name" ></el-input>
+                <el-form-item label="介绍" prop="introduction">
+                    <el-input v-model="editForm.introduction" ></el-input>
                 </el-form-item>
 
             </el-form>
@@ -68,7 +68,7 @@
         <el-dialog title="新增" v-model="addFormVisible"  :close-on-click-modal="false" >
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
                 <el-form-item label="姓名">
-                    <el-input v-model="addForm.name" auto-complete="off"></el-input>
+                    <el-input v-model="addForm.username" auto-complete="off"></el-input>
                 </el-form-item>
 
 
@@ -95,7 +95,7 @@
 
 
                 <el-form-item  label="管理员信息">
-                    <el-input type="text" :disabled="true" v-model="editPassword.name" auto-complete="off"></el-input>
+                    <el-input type="text" :disabled="true" v-model="editPassword.username" auto-complete="off"></el-input>
                     
                 </el-form-item>
 
@@ -130,7 +130,7 @@
         data() {
             return {
                 filters: {
-                    name: ''
+                    username: ''
                 },
                 users: [],
                 total: 0,
@@ -143,21 +143,21 @@
                 editFormVisible: false,//编辑界面是否显示
                 editLoading: false,
                 editFormRules: {
-                    name: [
+                    username: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
                     ]
                 },
                 //编辑界面数据
                 editForm: {
                     id: 0,
-                    name: '',
+                    username: '',
                     introduction: ''
                 },
 
                 addFormVisible: false,//新增界面是否显示
                 addLoading: false,
                 addFormRules: {
-                    name: [
+                    username: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
                     ],
                     password: [
@@ -166,7 +166,7 @@
                 },
                 //新增界面数据
                 addForm: {
-                    name : '',
+                    username : '',
                     password : '',
                     introduction : ''
                 },
@@ -184,7 +184,7 @@
                 },
                 editPassword : {  //改密界面数据
                     id:'',
-                    name:'',
+                    username:'',
                     password:'',
                     passwordagain:''
                 }
@@ -214,22 +214,23 @@
             getUsers() {
                 let para = {
                     page: this.page,
-                    name: this.filters.name
+                    username: this.filters.useruname
                 };
                 this.listLoading = true;
                 //NProgress.start();
                 
                 
 
-                listManagerRequest(para).then(data => {
-                    if(data.data.code==1){
+                listManagerRequest(para).then(res => {
+                    let {code,msg,data}=res.data;
+                    if(code==1){
                         this.users=[];
                         this.total=0;
                         this.listLoading = false;
                     }
-                    else if (data.data.code==0)
+                    else if (code==0)
                     {  
-                       this.users = JSON.parse(data.data.data).user;
+                       this.users = JSON.parse(data).manager;
                        this.total = this.users.length; 
                        this.listLoading = false;
                     }
@@ -282,6 +283,10 @@
 
                 });
             },
+            //显示权限界面
+            powerEdit: function (index,row) {
+
+            },
             //显示编辑界面
             handleEdit: function (index, row) {
                 this.editFormVisible = true;
@@ -304,11 +309,11 @@
                 
                     this.editPasswordVisible = true;
                     this.editPassword={
-                        name:'',
+                        username:'',
                         password:'',
                         passwordagain:''
                     };
-                    this.editPassword.name=row.name;
+                    this.editPassword.username=row.username;
                     this.editPassword.id=row.id;
 
                 }).catch(() => { });
@@ -318,7 +323,7 @@
             handleAdd: function () {
                 this.addFormVisible = true;
                 this.addForm = {
-                    name: '',
+                    username: '',
                     password:'',
                     introduction:''
                 };

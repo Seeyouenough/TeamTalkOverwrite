@@ -8,11 +8,14 @@ package com.webjava.web.restcontroller;
 import com.google.gson.Gson;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
+import com.manager.grpc.Manager;
 import com.manager.grpc.ManagerRequest;
 import com.manager.grpc.ManagerResponse;
 import com.manager.grpc.ManagerServiceGrpc;
 import com.webjava.kernel.entity.IMManager;
 import com.webjava.model.CheckLogin;
+import com.webjava.model.IDList;
+import com.webjava.model.IDObject;
 import com.webjava.utils.HttpUtils;
 import com.webjava.utils.ResponseInfo;
 import io.grpc.ManagedChannel;
@@ -27,7 +30,7 @@ import java.io.IOException;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/managers")
 public class ManagerRestController {
 
     private static final String HOST = "localhost";
@@ -71,8 +74,7 @@ public class ManagerRestController {
     }
 
     @RequestMapping(value = "/logout",method = RequestMethod.POST)
-    public void logout(HttpServletRequest request,HttpServletResponse response)
-    {
+    public void logout(HttpServletRequest request,HttpServletResponse response) {
         HttpUtils.setJsonBody(response ,new ResponseInfo(0,"success"));
     }
 
@@ -108,7 +110,7 @@ public class ManagerRestController {
 
     }
 
-    @RequestMapping(value="/manager/modify", method= RequestMethod.POST)
+    @RequestMapping(value="/manager/update", method= RequestMethod.POST)
     public void modify(HttpServletRequest request, HttpServletResponse response){
 
         String strData=HttpUtils.getJsonBody(request);
@@ -150,7 +152,7 @@ public class ManagerRestController {
 
         Gson gson=new Gson();
 
-        IMManager user=gson.fromJson(strJson,IMManager.class);
+        IMManager manager=gson.fromJson(strJson,IMManager.class);
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
                 .usePlaintext(true)
@@ -162,8 +164,8 @@ public class ManagerRestController {
 
         // Create a request
         ManagerRequest addManagerRequest = ManagerRequest.newBuilder()
-                .setUsername(user.getUsername())
-                .setPassword(user.getPassword())
+                .setUsername(manager.getUsername())
+                .setPassword(manager.getPassword())
                 .build();
 
         // Send the request using the stub
@@ -181,9 +183,71 @@ public class ManagerRestController {
     }
 
     @RequestMapping(value = "/manager/list", method = RequestMethod.GET)
-    public void listManager(HttpServletRequest request,HttpServletResponse response){
+    public void listManager(HttpServletRequest request,HttpServletResponse response) throws InvalidProtocolBufferException {
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
 
+        // Create a blocking stub with the channel
+        ManagerServiceGrpc.ManagerServiceBlockingStub stub =
+                ManagerServiceGrpc.newBlockingStub(channel);
+
+        // Create a request
+        ManagerRequest listManagerRequest = ManagerRequest.newBuilder().build();
+
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        ManagerResponse managerResponse = stub.listManager(listManagerRequest);
+
+
+        if(managerResponse.getStatusId()==0){
+
+            String data= JsonFormat.printer().preservingProtoFieldNames().print(managerResponse);
+
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"显示所有",data));
+        }else
+        {
+            System.out.println("nothing");
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"无内容"));
+        }
     }
 
+    @RequestMapping(value = "/manager/remove", method = RequestMethod.POST)
+    public void removeManager(HttpServletRequest request,HttpServletResponse response)
+    {
+        String strjson = HttpUtils.getJsonBody(request);
+        Gson gson = new Gson();
+        IDList IDs = gson.fromJson(strjson, IDList.class);
 
+
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
+
+        // Create a blocking stub with the channel
+        ManagerServiceGrpc.ManagerServiceBlockingStub stub =
+                ManagerServiceGrpc.newBlockingStub(channel);
+
+        ManagerRequest.Builder builder = ManagerRequest.newBuilder();
+        // Create a request
+        for (IDObject id: IDs.getParams()) {
+            Manager.Builder bu = Manager.newBuilder();
+            bu.setId(id.getId());
+            Manager manager =bu.build();
+
+            builder.addManager(manager);
+        }
+
+        ManagerRequest removeManagerRequest = builder.build();
+
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        ManagerResponse managerResponse = stub.removeManager(removeManagerRequest);
+
+        if (managerResponse.getStatusId()==0) {
+            HttpUtils.setJsonBody(response, new ResponseInfo(0, "删除成功！"));
+        } else {
+            HttpUtils.setJsonBody(response, new ResponseInfo(1, "部分信息未找到或未删除！"));
+        }
+    }
 }
