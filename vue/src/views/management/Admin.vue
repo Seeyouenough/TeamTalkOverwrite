@@ -24,7 +24,7 @@
             </el-table-column> 
             
             <el-table-column label="操作" width="270">
-                <template scope="scope">
+                <template slot-scope="scope">
 
                     <el-button size="small" @click="EditPassword(scope.$index, scope.row)">改密</el-button>
 
