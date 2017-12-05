@@ -30,7 +30,7 @@ import java.io.IOException;
 
 
 @RestController
-@RequestMapping("/managers")
+@RequestMapping("/users")
 public class ManagerRestController {
 
     private static final String HOST = "localhost";
@@ -110,8 +110,8 @@ public class ManagerRestController {
 
     }
 
-    @RequestMapping(value="/manager/update", method= RequestMethod.POST)
-    public void modify(HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value="/manager/updatePassword", method= RequestMethod.POST)
+    public void modifyPassword(HttpServletRequest request, HttpServletResponse response){
 
         String strData=HttpUtils.getJsonBody(request);
 

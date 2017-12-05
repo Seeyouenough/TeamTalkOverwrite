@@ -13,7 +13,6 @@ import com.user.grpc.UserRequest;
 import com.user.grpc.UserResponse;
 import com.user.grpc.UserServiceGrpc;
 import com.webjava.kernel.entity.IMUser;
-import com.webjava.kernel.service.IUserService;
 import com.webjava.model.IDList;
 import com.webjava.model.IDObject;
 import com.webjava.utils.EncryptHelper;
@@ -21,13 +20,10 @@ import com.webjava.utils.HttpUtils;
 import com.webjava.utils.ResponseInfo;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Random;
@@ -38,13 +34,9 @@ import java.util.Random;
 @RequestMapping("/users")
 public class UserRestController {
 
-    public static Logger logger= LogManager.getLogger(UserRestController.class.getName());
 
     private static final String HOST = "localhost";
     private static final int PORT = 50051;
-
-    @Resource
-    private IUserService userService;
 
     @RequestMapping(value = "/user/list",method = RequestMethod.GET)
     public void listUser(HttpServletRequest request, HttpServletResponse response) throws InvalidProtocolBufferException, InvalidProtocolBufferException {
@@ -124,6 +116,8 @@ public class UserRestController {
 
     @RequestMapping(value = "/user/remove",method = RequestMethod.POST)
     public void removeUser(HttpServletRequest request,HttpServletResponse response ) {
+
+
 
         String strjson = HttpUtils.getJsonBody(request);
         Gson gson = new Gson();
