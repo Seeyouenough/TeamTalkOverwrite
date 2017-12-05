@@ -59,11 +59,10 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          console.log("此处正常")
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
             this.loading = false
             this.$router.push({ path: '/' })
-
+          
           }).catch(() => {
             this.loading = false
           })

@@ -40,7 +40,7 @@
 			<el-table-column prop="departid" label="部门" min-width="100" :formatter="formatName" sortable>
 			</el-table-column>
 			
-			<el-table-column label="操作" width="200">
+			<el-table-column label="操作" width="300">
 				<template slot-scope="scope">
 
 					<el-button size="small" @click="EditPassword(scope.$index, scope.row)">改密</el-button>
@@ -62,7 +62,7 @@
 		</el-col>
 
 		<!--编辑界面-->
-		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
+		<el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="姓名" prop="name">
 					<el-input v-model="editForm.name" ></el-input>
@@ -104,9 +104,9 @@
 				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
 			</div>
 		</el-dialog>
-
+        <!-- v-model -->
 		<!--新增界面-->
-		<el-dialog title="新增" v-model="addFormVisible"  :close-on-click-modal="false" >
+		<el-dialog title="新增" :visible.sync="addFormVisible"  :close-on-click-modal="false" >
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="姓名">
 					<el-input v-model="addForm.name" auto-complete="off"></el-input>
@@ -134,8 +134,6 @@
 					</el-select>
 				</el-form-item>
 
-
-				
 				<el-form-item label="邮箱">
 					<el-input  v-model="addForm.email"></el-input>
 				</el-form-item>
@@ -153,7 +151,7 @@
 
 
         <!--改密界面-->
-		<el-dialog title="改密" v-model="editPasswordVisible" :close-on-click-modal="false">
+		<el-dialog title="改密" :visible.sync="editPasswordVisible" :close-on-click-modal="false">
 			<el-form :model="editPassword" label-width="150px" :rules="editPasswordRules" ref="editPassword">
 
 
@@ -265,7 +263,6 @@
 					password:'',
 					passwordagain:''
 				}
-
 			}
 		},
 		methods: {
@@ -363,6 +360,7 @@
 					removeUserRequest(para).then(data => {
 						this.listLoading = false;
 						//NProgress.done();
+						console.log(data)
 						if(data.data.code==0){
                                 this.$message({
 								message: '删除成功',

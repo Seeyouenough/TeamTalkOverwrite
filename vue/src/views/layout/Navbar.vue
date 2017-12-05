@@ -1,4 +1,7 @@
 <template>
+
+    <section>
+
 	<el-menu class="navbar" mode="horizontal">
 		<hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
 		<levelbar></levelbar>
@@ -14,15 +17,42 @@
 						首页
 					</el-dropdown-item>
 				</router-link>
-				<a target='_blank' href="https://github.com/PanJiaChen/vue-element-admin/">
+				<a target='_blank' href="https://github.com/Seeyouenough/TeamTalkOverwrite">
 					<el-dropdown-item>
 						项目地址
 					</el-dropdown-item>
 				</a>
+                <el-dropdown-item divided><span @click="modifyPassword" style="display:block;">修改管理员密码</span></el-dropdown-item>
 				<el-dropdown-item divided><span @click="logout" style="display:block;">退出登录</span></el-dropdown-item>
 			</el-dropdown-menu>
 		</el-dropdown>
 	</el-menu>
+
+   
+     <el-dialog title="管理员密码修改" :visible.sync="modifyFormVisible" :close-on-click-modal="false">
+     <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="150px" class="demo-ruleForm login-container">
+     <el-form-item label="管理员账号信息:" prop="username">
+     <el-input type="text" :disabled="true" v-model="ruleForm2.username" auto-complete="off" ></el-input>
+      </el-form-item>
+     <el-form-item label="请输入旧密码:" prop="oldPass">
+     <el-input type="password" v-model="ruleForm2.oldPass" auto-complete="off" placeholder="请输入旧密码"></el-input>
+     </el-form-item>
+     <el-form-item label="请输入新密码:" prop="newPass">
+     <el-input type="password" v-model="ruleForm2.newPass" auto-complete="off" placeholder="请输入新密码"></el-input>
+     </el-form-item>
+     <el-form-item label="请再次输入新密码:" prop="checkPass">
+     <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="请再次输入新密码"></el-input>
+     </el-form-item>
+                    
+     </el-form>
+
+     <div slot="footer" class="dialog-footer">
+     <el-button @click.native="modifyFormVisible = false">取消</el-button>
+     <el-button type="primary" @click.native.prevent="decide" :loading="modifyLoading">提交</el-button>
+     </div>
+
+     </el-dialog>
+     </section>
 </template>
 
 <script>
@@ -40,17 +70,109 @@ export default {
   },
   data() {
     return {
-      
+       modifyLoading: false,
+       modifyFormVisible: false,
+       //密码修改界面数据
+       ruleForm2: {
+         username: '',
+         oldPass:'',
+         newPass:'',
+         checkPass: ''
+       },
+       rules2: {
+         oldPass: [
+           { required: true, message: '请输入旧密码', trigger: 'blur' },
+
+         ],
+         newPass: [
+           { required: true, message: '请输入新密码', trigger: 'blur' },
+           
+         ],
+         checkPass: [
+           { required: true, message: '请再次输入新密码', trigger: 'blur' },
+           
+         ]
+
+       }   
     }
   },
   computed: {
     ...mapGetters([
       'sidebar',
       'name',
-      'avatar'
+      'avatar',
+      'password'
     ])
   },
   methods: {
+    decide(){
+          if(this.ruleForm2.oldPass!=password){
+            this.$message({
+                             message: "旧密码错误,请重新输入!",
+                             type: 'warning'
+                            });
+          }else{
+            if(this.ruleForm2.newPass!=this.ruleForm2.checkPass){
+               this.$message({
+                message: "两次新密码输入不一致,请重新输入!",
+                type: 'warning'
+               });
+            }else{
+               this.handleSubmit2();
+            }
+          }
+    },
+    modifyPassword : function(){
+        this.$confirm('确认更改密码吗?', '提示', {
+              type: 'warning'
+             }).then(() => {
+                   this.modifyFormVisible = true;
+                   this.ruleForm2={
+                   username: name,
+                   oldPass:'',
+                   newPass:'',
+                   checkPass: ''
+                     };
+      }).catch(() => { });        
+
+    },
+    handleSubmit2() {
+            this.$refs.ruleForm2.validate((valid) => {
+            if (valid) {
+               this.modifyLoading = true;
+                      //NProgress.start(); 
+               var modifyParams = { username: this.ruleForm2.username, password: this.ruleForm2.checkPass };
+                      //console.log(modifyParams);
+               modifyRequest(modifyParams).then(data => {
+                      
+                   if(data.code==1){
+                      this.modifyLoading=false;
+                      this.$message({
+                           message:'修改管理员密码失败',
+                           type:'warning'
+                       });
+                   }
+                   else if(data.code==0){
+                       this.modifyLoading = false;
+                      this.$message({
+                               message: "密码修改成功!",
+                               type: 'success'
+                                   });
+                      this.$router.push({ path: '/Login' });
+                  }else
+                  {
+                      this.modifyLoading=false;
+                            this.$message({
+                            message:'请求密码修改失败',
+                            type:'error'
+                   });
+             }            
+              });
+            } else {
+               return false;
+               }
+                  });
+     },
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },

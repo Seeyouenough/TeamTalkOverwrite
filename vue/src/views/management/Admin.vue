@@ -23,7 +23,7 @@
             <el-table-column prop="introduction" label="介绍" min-width="150" sortable>
             </el-table-column> 
             
-            <el-table-column label="操作" width="270">
+            <el-table-column label="操作" width="300">
                 <template slot-scope="scope">
 
                     <el-button size="small" @click="EditPassword(scope.$index, scope.row)">改密</el-button>
@@ -47,7 +47,7 @@
         </el-col>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
+        <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="姓名" prop="username">
                     <el-input v-model="editForm.username" ></el-input>
@@ -65,7 +65,7 @@
         </el-dialog>
 
         <!--新增界面-->
-        <el-dialog title="新增" v-model="addFormVisible"  :close-on-click-modal="false" >
+        <el-dialog title="新增" :visible.sync="addFormVisible"  :close-on-click-modal="false" >
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
                 <el-form-item label="姓名">
                     <el-input v-model="addForm.username" auto-complete="off"></el-input>
@@ -89,7 +89,7 @@
 
 
         <!--改密界面-->
-        <el-dialog title="改密" v-model="editPasswordVisible" :close-on-click-modal="false">
+        <el-dialog title="改密" :visible.sync="editPasswordVisible" :close-on-click-modal="false">
             <el-form :model="editPassword" label-width="150px" :rules="editPasswordRules" ref="editPassword">
 
 

@@ -10,6 +10,7 @@ const user = {
     name: '',
     avatar: '',
     introduction: '',
+    password: '',
     setting: {
       articlePlatform: []
     }
@@ -36,6 +37,9 @@ const user = {
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
+    },
+    SET_PASSWORD: (state,password) =>{
+      state.password = password
     }
   },
 
@@ -45,7 +49,7 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
-        
+          commit('SET_PASSWORD',userInfo.password)
           var data =JSON.parse(response.data.data) 
           setToken(data.token)
           commit('SET_TOKEN', data.token)
