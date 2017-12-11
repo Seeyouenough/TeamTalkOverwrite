@@ -8,7 +8,6 @@ import { Message } from 'element-ui'
 // register global progress.
 const whiteList = ['/login', '/authredirect']// 不重定向白名单
 router.beforeEach((to, from, next) => {
-
   NProgress.start() // 开启Progress
   if (getToken()) { // 判断是否有token
     if (to.path === '/login') {
@@ -22,7 +21,6 @@ router.beforeEach((to, from, next) => {
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
             next({ ...to }) // hack方法 确保addRoutes已完成
           }) 
-
         }).catch(() => {
           store.dispatch('FedLogOut').then(() => {
             Message.error('验证失败,请重新登录')

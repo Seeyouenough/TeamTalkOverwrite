@@ -1,6 +1,6 @@
 <template>
     <section>
-        <p class="message">权限管理</p>
+        <p>权限管理</p>
     </section>
 </template>
 
@@ -14,8 +14,10 @@
 
 </script>
 
-<style scoped>
-    .message{
-        font-size: 18
-    }
+<style  scoped lang="scss">
+    .main-container{
+        width: 100%;
+        margin-left: 20px;
+     }
+
 </style>

@@ -36,8 +36,8 @@ export const constantRouterMap = [
     icon: 'people',
     noDropdown: true,
     children: [{ path: '/introduction/index', component: _import('/introduction/index'), name: '简述' }]
-  },
-  { path: '*', redirect: '/404', hidden: true }
+  }/*,
+  { path: '*', redirect: '/404', hidden: true }*/
 
 ]
 

@@ -49,11 +49,18 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
-          commit('SET_PASSWORD',userInfo.password)
-          var data =JSON.parse(response.data.data) 
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
-          resolve()
+          let {data,msg,code} =response.data
+          if(code==0){
+            commit('SET_PASSWORD',userInfo.password)
+            var jsondata =JSON.parse(data)
+            setToken(jsondata.token)
+            commit('SET_TOKEN', jsondata.token)
+            resolve()
+          }else
+          {   
+             reject(msg)
+          }
+          
         }).catch(error => {
           reject(error)
         })
@@ -64,14 +71,17 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
-          var data = JSON.parse(response.data.data)
-          if (!response.data.data) { // 由于mockjs 不支持自定义状态码只能这样hack
-            reject('error')
-          }
-          commit('SET_NAME', data.username)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
+         let {data,msg,code} =response.data
+         if(code==0){
+          var dataJson = JSON.parse(data)
+          commit('SET_NAME', dataJson.username)
+          commit('SET_AVATAR', dataJson.avatar)
+          commit('SET_INTRODUCTION', dataJson.introduction)
           resolve(response)
+         }else
+         {
+          reject(msg)
+         }
         }).catch(error => {
           reject(error)
         })
@@ -84,6 +94,8 @@ const user = {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
+          //window.sessionStorage.removeItem("addRouters")
+          //window.sessionStorage.removeItem("routers")
           removeToken()
           resolve()
         }).catch(error => {
@@ -96,27 +108,13 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
+        //window.sessionStorage.removeItem("addRouters")
+        //window.sessionStorage.removeItem("routers")
         removeToken()
         resolve()
       })
     }
-
-    /*// 动态修改权限
-    ChangeRole({ commit }, role) {
-      return new Promise(resolve => {
-        commit('SET_TOKEN', role)
-        setToken(role)
-        getUserInfo(role).then(response => {
-          const data = JSON.parase(response.data.data)
-          commit('SET_ROLES', data.role)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
-          resolve()
-        })
-      })
-    }
-*/  }
+ }
 }
 
 export default user

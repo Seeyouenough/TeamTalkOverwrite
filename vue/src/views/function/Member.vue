@@ -15,7 +15,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%" >
+		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" class="main-container" >
 			<el-table-column type="selection" width="55">
 			</el-table-column>
 
@@ -198,7 +198,6 @@
 				total: 0,
 				page: 1,
 
-          
 				departs :[],
 				num : 0,
                 departList  : [],
@@ -321,8 +320,7 @@
                     for(var key in this.departs){
                         this.departList.push({id:this.departs[key].id, name:this.departs[key].departname});
                     }
-                });
-
+              
 				listUsersRequest(para).then(data => {
 					if(data.data.code==1){
 						this.users=[];
@@ -345,6 +343,7 @@
 					
 					//NProgress.done();
 				});
+			    });
 			},
 			//删除
 			handleDel: function (index, row) {
@@ -612,7 +611,10 @@
 </script>
 
 
-<style  scoped>
-       
+<style  scoped lang="scss">
+    .main-container{
+        width: 100%;
+        margin-left: 20px;
+     }
 
 </style>

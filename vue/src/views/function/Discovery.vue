@@ -12,7 +12,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" class="main-container">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
 
@@ -417,6 +417,10 @@
 
 </script>
 
-<style scoped>
+<style  scoped lang="scss">
+    .main-container{
+        width: 100%;
+        margin-left: 20px;
+     }
 
 </style>

@@ -51,6 +51,7 @@ export default {
 			bottom: 0;
 			left: 0;
 			z-index: 1001;
+            background-color: #DDEDFB;
 			overflow-y: auto;
  			&::-webkit-scrollbar {display:none}
 		}

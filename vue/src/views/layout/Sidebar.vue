@@ -12,8 +12,8 @@ export default {
   components: { SidebarItem },
   computed: {
     ...mapGetters([
-      'permission_routers',
-      'sidebar'
+      'sidebar',
+      'permission_routers'
     ]),
     isCollapse() {
       return !this.sidebar.opened
