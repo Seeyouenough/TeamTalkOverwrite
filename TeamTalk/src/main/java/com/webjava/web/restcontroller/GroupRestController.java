@@ -81,12 +81,7 @@ public class GroupRestController {
             {
                 HttpUtils.setJsonBody(response,new ResponseInfo(1,"无此ID信息！"));
             }
-
         }
-
-
-
-
     }
 
     @RequestMapping(value = "/group/update",method = RequestMethod.POST)
@@ -101,9 +96,7 @@ public class GroupRestController {
         }
         else {
             HttpUtils.setJsonBody(response,new ResponseInfo(1,"无此用户，用户信息更新失败"));
-
         }
-
     }
 
 }

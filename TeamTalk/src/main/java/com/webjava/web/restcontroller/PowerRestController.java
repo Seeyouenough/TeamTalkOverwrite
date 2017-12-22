@@ -168,10 +168,10 @@ public class PowerRestController {
         PowerResponse powerResponse = stub.listPower(listPowerRequest);
 
 
-        if(powerResponse.getStatusId()==1){
+        if(powerResponse.getStatusId()==0){
 
             String data= JsonFormat.printer().includingDefaultValueFields().preservingProtoFieldNames().print(powerResponse);
-
+            System.out.println(data);
             HttpUtils.setJsonBody(response,new ResponseInfo(0,"显示所有用户",data));
         }else
         {
@@ -200,7 +200,7 @@ public class PowerRestController {
 
         PowerResponse getResponse =stub.getRoute(setRequest);
 
-        if(getResponse.getStatusId()==1){
+        if(getResponse.getStatusId()==0){
 
             String data= JsonFormat.printer().preservingProtoFieldNames().print(getResponse);
 

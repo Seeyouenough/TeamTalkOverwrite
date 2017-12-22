@@ -165,7 +165,7 @@ public class RoleRestController {
         RoleResponse roleResponse = stub.listRole(listRoleRequest);
 
 
-        if(roleResponse.getStatusId()==1){
+        if(roleResponse.getStatusId()==0){
 
             String data= JsonFormat.printer().includingDefaultValueFields().preservingProtoFieldNames().print(roleResponse);
 

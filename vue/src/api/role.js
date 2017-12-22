@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-export function listRolesRequest() {
+export function listRoleRequest() {
   
   return fetch({
     url: '/role/list',

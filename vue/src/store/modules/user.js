@@ -3,7 +3,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
   state: {
-    user: '',
+    manager_id: 0,
     status: '',
     code: '',
     token: getToken(),
@@ -17,6 +17,9 @@ const user = {
   },
 
   mutations: {
+    SET_ID: (state, id) => {
+      state.manager_id = id
+    },
     SET_CODE: (state, code) => {
       state.code = code
     },
@@ -51,7 +54,6 @@ const user = {
         loginByUsername(username, userInfo.password).then(response => {
           let {data,msg,code} =response.data
           if(code==0){
-            commit('SET_PASSWORD',userInfo.password)
             var jsondata =JSON.parse(data)
             setToken(jsondata.token)
             commit('SET_TOKEN', jsondata.token)
@@ -74,9 +76,11 @@ const user = {
          let {data,msg,code} =response.data
          if(code==0){
           var dataJson = JSON.parse(data)
+          commit('SET_PASSWORD',dataJson.password)
           commit('SET_NAME', dataJson.username)
           commit('SET_AVATAR', dataJson.avatar)
           commit('SET_INTRODUCTION', dataJson.introduction)
+          commit('SET_ID', dataJson.id)
           resolve(response)
          }else
          {

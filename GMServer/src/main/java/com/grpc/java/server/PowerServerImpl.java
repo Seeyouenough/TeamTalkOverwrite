@@ -99,7 +99,8 @@ public class PowerServerImpl extends PowerServiceGrpc.PowerServiceImplBase {
                 Power.Builder bu = Power.newBuilder();
                 bu.setPowerId(ri.getPowerId());
                 bu.setPowerName(ri.getPowerName());
-
+                bu.setPowerUrl(ri.getPowerUrl());
+                bu.setParentId(ri.getParentId());
                 builder.addPower(bu);
             }
             status=0;
@@ -174,7 +175,7 @@ public class PowerServerImpl extends PowerServiceGrpc.PowerServiceImplBase {
 
         if(cc.size()>0){
             for(int zz : cc){
-                for(int i=0; i<dd.size(); i++){
+                for(int i=0; i<dd.size(); i++){ //去除重复权限id
                     if(dd.get(i)==zz){
                        count=1;
                     }
@@ -196,9 +197,10 @@ public class PowerServerImpl extends PowerServiceGrpc.PowerServiceImplBase {
                     builder.addPower(bu);
                 }
             }
+            status=0;
         }
 
-        PowerResponse response=builder.setStatusId(1).build();
+        PowerResponse response=builder.setStatusId(status).build();
 
         responseStreamObserver.onNext(response);
         responseStreamObserver.onCompleted();

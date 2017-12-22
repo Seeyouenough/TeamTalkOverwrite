@@ -17,7 +17,7 @@ public class HttpUtils {
     {
         Gson gson = new Gson();
         String bodyStr = gson.toJson(info);
-
+        
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         PrintWriter out = null;

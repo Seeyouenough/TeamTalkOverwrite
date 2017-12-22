@@ -83,52 +83,5 @@
 
         </table>
 
-
-        <table tableName="IMUser"
-               domainObjectName="IMUser"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false">
-        </table>
-
-        <table tableName="IMGroup"
-               domainObjectName="IMGroup"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false">
-        </table>
-
-        <table tableName="IMGroupMember"
-               domainObjectName="IMGroupMember"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false">
-        </table>
-
-        <table tableName="IMDepart"
-               domainObjectName="IMDepart"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false">
-        </table>
-
-
-        <table tableName="IMDiscovery"
-               domainObjectName="IMDiscovery"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false">
-        </table>
-
     </context>
 </generatorConfiguration>

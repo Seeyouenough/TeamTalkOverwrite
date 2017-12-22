@@ -1,6 +1,6 @@
 import fetch from '@/utils/fetch'
 
-export function listPowersRequest() {
+export function listPowerRequest() {
   
   return fetch({
     url: '/power/list',

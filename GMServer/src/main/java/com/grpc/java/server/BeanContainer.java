@@ -10,6 +10,7 @@ import javax.annotation.Resource;
  */
 @Service("beanService")
 public class BeanContainer {
+
     @Resource
     public ManagerService managerService;
 

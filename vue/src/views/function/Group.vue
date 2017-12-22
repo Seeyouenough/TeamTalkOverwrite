@@ -10,7 +10,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" class="main-container">
+		<el-table :data="users" stripe border fit highlight-current-row v-loading="listLoading" @selection-change="selsChange" class="main-container">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
 
@@ -33,7 +33,7 @@
 		</el-table>
 
 		<!--工具条-->
-		<el-col :span="24" class="toolbar">
+		<el-col :span="24" class="toolbar_two">
 			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
 			</el-pagination>
@@ -372,7 +372,14 @@
 <style  scoped lang="scss">
     .main-container{
         width: 100%;
+        margin: 20px;
+    }
+    .toolbar{
+        margin-left: 40px;
+        margin-top: 20px;
+    }
+    .toolbar_two{
         margin-left: 20px;
-     }
+    }
 
 </style>

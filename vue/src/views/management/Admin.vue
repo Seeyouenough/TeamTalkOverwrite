@@ -10,7 +10,7 @@
         </el-col>
 
         <!--列表-->
-        <el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" class="main-container" >
+        <el-table :data="users" stripe border fit highlight-current-row v-loading="listLoading" @selection-change="selsChange" class="main-container" >
             <el-table-column type="selection" width="55">
             </el-table-column>
 
@@ -23,14 +23,14 @@
             <el-table-column prop="introduction" label="介绍" min-width="150" sortable>
             </el-table-column> 
             
-            <el-table-column label="操作" width="300">
+            <el-table-column label="操作" width="350">
                 <template slot-scope="scope">
 
                     <el-button size="small" @click="EditPassword(scope.$index, scope.row)">改密</el-button>
 
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                   
-                    <el-button size="small" @click="powerEdit(scope.$index, scope.row)">权限</el-button>
+                    <el-button size="small" @click="roleEdit(scope.$index, scope.row)">拥有角色</el-button>
                     <!-- <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button> -->
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 
@@ -40,7 +40,7 @@
         </el-table>
 
         <!--工具条-->
-        <el-col :span="24" class="toolbar">
+        <el-col :span="24" class="toolbar_two">
             <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
             <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
             </el-pagination>
@@ -237,7 +237,7 @@
                     else{
                         this.listLoading=false;
                         this.$message({
-                            message:'获取用户数据失败',
+                            message:'获取管理员数据失败',
                             type:'warning'
                         });
                     } 
@@ -284,7 +284,7 @@
                 });
             },
             //显示权限界面
-            powerEdit: function (index,row) {
+            roleEdit: function (index,row) {
 
             },
             //显示编辑界面
@@ -309,6 +309,7 @@
                 
                     this.editPasswordVisible = true;
                     this.editPassword={
+                        manager_id:0,
                         username:'',
                         password:'',
                         passwordagain:''
@@ -374,7 +375,6 @@
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.addLoading = true;
                             //NProgress.start();
-                            this.addForm.password=this.md5(this.addForm.password);
                             let para = Object.assign({}, this.addForm);
                             //para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             addManagerRequest(para).then(data => {
@@ -414,15 +414,10 @@
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.editPasswordLoading = true;
                             
-                          
-                            this.editPassword.password=this.md5(this.editPassword.password);  
-                            //console.log(this.editPassword.id);
-                            
                             let para ={id:this.editPassword.id,password:this.editPassword.password};
                
-                            //console.log("内容是:"+para);
                             updatePasswordRequest(para).then(data => {
-
+                                
                                 this.editPasswordLoading = false;
                                 //NProgress.done();
                                 if(data.data.code==0){
@@ -430,6 +425,7 @@
                                     message: '提交成功',
                                     type: 'success'
                                 });
+                                this.$router.push({ path: '/Login' });   
                                 }
                                 else if(data.data.code==1){
                                     this.$message({
@@ -513,7 +509,14 @@
 <style  scoped lang="scss">
     .main-container{
         width: 100%;
+        margin: 20px;
+    }
+    .toolbar{
+        margin-left: 40px;
+        margin-top: 20px;
+    }
+    .toolbar_two{
         margin-left: 20px;
-     }
+    }
 
 </style>

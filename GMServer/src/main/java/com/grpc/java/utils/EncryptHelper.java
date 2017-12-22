@@ -7,25 +7,12 @@ import java.security.MessageDigest;
  */
 public class EncryptHelper {
 
-    /**
-     * blog www.micmiu.com
-     *
-     * @author Michael
-     *
-     */
-
         private static final String ALGORITHM = "MD5";
 
         private static final char[] HEX_DIGITS = { '0', '1', '2', '3', '4', '5',
                 '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-        /**
-         * encode string
-         *
-         * @param algorithm
-         * @param str
-         * @return String
-         */
+
         public static String encode(String algorithm, String str) {
             if (str == null) {
                 return null;
@@ -40,12 +27,6 @@ public class EncryptHelper {
 
         }
 
-        /**
-         * encode By MD5
-         *
-         * @param str
-         * @return String
-         */
         public static String encodeByMD5(String str) {
             if (str == null) {
                 return null;
@@ -78,12 +59,5 @@ public class EncryptHelper {
             return buf.toString();
         }
 
-        public static void main(String[] args) {
-        System.out.println("111111 MD5  :"
-                + EncryptHelper.encodeByMD5("111111"));
-        System.out.println("111111 MD5  :"
-                + EncryptHelper.encode("MD5", "111111"));
-        System.out.println("111111 SHA1 :"
-                + EncryptHelper.encode("SHA1", "111111"));
-    }
+
 }

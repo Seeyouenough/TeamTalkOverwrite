@@ -114,9 +114,10 @@ public class ManagerRestController {
     public void modifyPassword(HttpServletRequest request, HttpServletResponse response){
 
         String strData=HttpUtils.getJsonBody(request);
-
+        System.out.println(strData);
         Gson gson = new Gson();
         IMManager admin=gson.fromJson(strData,IMManager.class);
+
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
                 .usePlaintext(true)
@@ -128,7 +129,7 @@ public class ManagerRestController {
 
         // Create a request
         ManagerRequest modifyRequest = ManagerRequest.newBuilder()
-                .setUsername(admin.getUsername())
+                .setId(admin.getId())
                 .setPassword(admin.getPassword())
                 .build();
 

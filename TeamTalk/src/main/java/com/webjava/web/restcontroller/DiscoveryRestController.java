@@ -12,7 +12,6 @@ import com.google.gson.Gson;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.webjava.kernel.entity.IMDiscovery;
-import com.webjava.kernel.service.IDiscoveryService;
 import com.webjava.model.IDList;
 import com.webjava.model.IDObject;
 import com.webjava.utils.HttpUtils;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,9 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/users")
 public class DiscoveryRestController {
-
-    @Resource
-    private IDiscoveryService discoveryService;
 
     private static final String HOST = "localhost";
     private static final int PORT = 50051;

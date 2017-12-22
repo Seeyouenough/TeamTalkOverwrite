@@ -70,6 +70,7 @@ public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase
         if(manager!=null){
             Manager.Builder aa=Manager.newBuilder();
             aa.setId(manager.getManagerId());
+            aa.setPassword(manager.getPassword());
             aa.setUsername(manager.getUsername());
             aa.setAvatar(manager.getAvatar());
             aa.setIntroduction(manager.getIntroduction());
@@ -116,12 +117,11 @@ public class ManagerServerImpl extends ManagerServiceGrpc.ManagerServiceImplBase
     public void modifyPassword(ManagerRequest request, StreamObserver<ManagerResponse> responseStreamObserver){
 
         System.out.println("Received request: " + request);
-
-        String uname = request.getUsername();
+        System.out.println(request);
+        int id = request.getId();
         String pwd = request.getPassword();
-
-        pwd = EncryptHelper.encodeByMD5(pwd);
-        manager_info user = this.managerService.getName(uname);
+        pwd=EncryptHelper.encodeByMD5(pwd);
+        manager_info user = this.managerService.getId(id);
         if(user!=null){
             user.setPassword(pwd);
             this.managerService.updatePassword(user);
