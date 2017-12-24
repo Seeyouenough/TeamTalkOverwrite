@@ -6,15 +6,15 @@ package com.webjava.web.restcontroller;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.power.grpc.Power;
 import com.power.grpc.PowerRequest;
 import com.power.grpc.PowerResponse;
 import com.power.grpc.PowerServiceGrpc;
-import com.webjava.model.IDList;
-import com.webjava.model.IDObject;
 import com.webjava.model.power_info;
+import com.webjava.model.role_info;
 import com.webjava.utils.HttpUtils;
 import com.webjava.utils.ResponseInfo;
 import io.grpc.ManagedChannel;
@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -62,7 +65,7 @@ public class PowerRestController {
         System.out.println("Client sending request");
         PowerResponse modifyResponse = stub.modifyPower(modifyRequest);
 
-        if(modifyResponse.getStatusId()==1){
+        if(modifyResponse.getStatusId()==0){
             HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改成功!"));
         }else
         {
@@ -113,8 +116,9 @@ public class PowerRestController {
     public void removePower(HttpServletRequest request,HttpServletResponse response ) {
 
         String strjson = HttpUtils.getJsonBody(request);
-        Gson gson = new Gson();
-        IDList IDs = gson.fromJson(strjson, IDList.class);
+        List<Integer> list=new ArrayList<Integer>();
+        Type type = new TypeToken<ArrayList<Integer>>(){}.getType();
+        list = new Gson().fromJson(strjson, type);
 
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
@@ -127,11 +131,10 @@ public class PowerRestController {
 
         PowerRequest.Builder builder = PowerRequest.newBuilder();
         // Create a request
-        for (IDObject id: IDs.getParams()) {
+        for (int i :list) {
             Power.Builder bu = Power.newBuilder();
-            bu.setPowerId(id.getId());
+            bu.setPowerId(i);
             Power user =bu.build();
-
             builder.addPower(user);
         }
 
@@ -141,7 +144,7 @@ public class PowerRestController {
         System.out.println("Client sending request");
         PowerResponse userResponse = stub.removePower(removePowerRequest);
 
-        if (userResponse.getStatusId()==1) {
+        if (userResponse.getStatusId()==0) {
             HttpUtils.setJsonBody(response, new ResponseInfo(0, "删除成功！"));
         } else {
             HttpUtils.setJsonBody(response, new ResponseInfo(1, "部分信息未找到或未删除！"));
@@ -171,7 +174,6 @@ public class PowerRestController {
         if(powerResponse.getStatusId()==0){
 
             String data= JsonFormat.printer().includingDefaultValueFields().preservingProtoFieldNames().print(powerResponse);
-            System.out.println(data);
             HttpUtils.setJsonBody(response,new ResponseInfo(0,"显示所有用户",data));
         }else
         {
@@ -205,6 +207,41 @@ public class PowerRestController {
             String data= JsonFormat.printer().preservingProtoFieldNames().print(getResponse);
 
             HttpUtils.setJsonBody(response,new ResponseInfo(0,"获取路由信息",data));
+        }else
+        {
+            System.out.println("nothing");
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"无内容"));
+        }
+
+
+    }
+
+    @RequestMapping(value = "/getPower",method = RequestMethod.POST)
+    public void getPower(HttpServletRequest request,HttpServletResponse response) throws InvalidProtocolBufferException {
+        String strData = HttpUtils.getJsonBody(request);
+        Gson gson=new Gson();
+        role_info role=gson.fromJson(strData,role_info.class);
+        int id = role.getRoleId();
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
+
+        // Create a blocking stub with the channel
+        PowerServiceGrpc.PowerServiceBlockingStub stub =
+                PowerServiceGrpc.newBlockingStub(channel);
+
+        PowerRequest setRequest =PowerRequest.newBuilder()
+                .setId(id)
+                .build();
+
+
+        PowerResponse getResponse =stub.getPower(setRequest);
+
+        if(getResponse.getStatusId()==0){
+
+            String data= JsonFormat.printer().preservingProtoFieldNames().print(getResponse);
+
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"获取该角色权限",data));
         }else
         {
             System.out.println("nothing");

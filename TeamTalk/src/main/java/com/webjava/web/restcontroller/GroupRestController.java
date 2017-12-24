@@ -4,9 +4,9 @@ package com.webjava.web.restcontroller;
  */
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.webjava.kernel.entity.IMGroup;
 import com.webjava.kernel.service.IGroupService;
-import com.webjava.model.IDList;
 import com.webjava.utils.HttpUtils;
 import com.webjava.utils.ResponseInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -66,13 +68,13 @@ public class GroupRestController {
     @RequestMapping(value = "/group/remove",method = RequestMethod.POST)
     public void removeGroup(HttpServletRequest request,HttpServletResponse response ){
 
-        String strjson =HttpUtils.getJsonBody(request);
-        Gson gson =new Gson();
-        IDList IDs =gson.fromJson(strjson,IDList.class);
+        String strjson = HttpUtils.getJsonBody(request);
+        List<Integer> list=new ArrayList<Integer>();
+        Type type = new TypeToken<ArrayList<Integer>>(){}.getType();
+        list = new Gson().fromJson(strjson, type);
 
-        for(int i=0 ; i<IDs.getParams().size() ;i++){
-
-            Integer id = IDs.getParams().get(i).getId();
+        for(int i : list){
+            Integer id = i;
             IMGroup exitId =this.groupService.getGroupById(id);
             if(exitId!=null){
                 this.groupService.deleteGroup(id);

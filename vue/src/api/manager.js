@@ -26,7 +26,7 @@ export function removeManagerRequest(data) {
 
 export function updateManagerRequest(data) {
   return fetch({
-    url: '/manager/update',
+    url: '/manager/modify',
     method: 'post',
     data
   })
@@ -35,6 +35,14 @@ export function updateManagerRequest(data) {
 export function updatePasswordRequest(data) {
   return fetch({
     url: '/manager/updatePassword',
+    method: 'post',
+    data
+  })
+}
+
+export function changeRole(data) {
+  return fetch({
+    url: '/manager/changeRole',
     method: 'post',
     data
   })

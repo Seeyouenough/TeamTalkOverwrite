@@ -60,7 +60,7 @@
   <insert id="insertSelective" parameterType="com.grpc.java.kernel.entity.manager_info">
     insert into manager_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="manaerId != null">
+      <if test="managerId != null">
         manager_id,
       </if>
       <if test="username != null">
@@ -80,8 +80,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="manaerId != null">
-        #{manaerId,jdbcType=INTEGER},
+      <if test="managerId != null">
+        #{managerId,jdbcType=INTEGER},
       </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
@@ -120,7 +120,7 @@
         avatar = #{avatar,jdbcType=VARCHAR},
       </if>
     </set>
-    where manager_id = #{manaerId,jdbcType=INTEGER}
+    where manager_id = #{managerId,jdbcType=INTEGER}
   </update>
 
 

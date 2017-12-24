@@ -354,8 +354,8 @@
 					//NProgress.start();
                  
 					let para =[];
-					para.push({id:row.id});   
-
+					para.push(row.id);   
+                    
 					removeUserRequest(para).then(data => {
 						this.listLoading = false;
 						//NProgress.done();
@@ -564,7 +564,7 @@
                 let sss =this.sels.map(item => item.id);
 				for(var key in sss)  
 				{
-                     idss.push({id:sss[key]})  ;  
+                     idss.push(sss[key])  ;  
                 };
 
                 //console.log(idss);

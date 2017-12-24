@@ -39,8 +39,8 @@
         <!--编辑界面-->
         <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="角色名称" prop="role_name">
-                    <el-input v-model="editForm.role_name" ></el-input>
+                <el-form-item label="角色名称" prop="roleName">
+                    <el-input v-model="editForm.roleName" ></el-input>
                 </el-form-item>
 
             </el-form>
@@ -54,13 +54,35 @@
         <el-dialog title="新增" :visible.sync="addFormVisible"  :close-on-click-modal="false" >
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
                 <el-form-item label="角色名称">
-                    <el-input v-model="addForm.role_name" auto-complete="off"></el-input>
+                    <el-input v-model="addForm.roleName" auto-complete="off"></el-input>
                 </el-form-item>
 
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click.native="addFormVisible = false">取消</el-button>
                 <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog title="拥有权限" :visible.sync="powerFormVisible"  :close-on-click-modal="false" >
+            <div>
+            <el-tree
+            :data="tree_date"
+            :props="defaultProps"
+            show-checkbox
+            node-key="id"
+            ref="tree"
+            :check-strictly="true"
+            highlight-current
+            default-expand-all
+            :expand-on-click-node="false">
+
+            </el-tree>
+            </div>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click.native="powerFormVisible = false">取消</el-button>
+                <el-button type="primary" @click.native="powerSubmit" :loading="powerLoading">提交</el-button>
             </div>
         </el-dialog>
 
@@ -71,19 +93,28 @@
     import util from '@/common/js/util'
     //import md5 from 'js-md5';
     //import NProgress from 'nprogress'
-    import { listRoleRequest,addRoleRequest,removeRoleRequest,updateRoleRequest } from '@/api/role'
-    
-  
+    import { listRoleRequest,addRoleRequest,removeRoleRequest,updateRoleRequest,changePower} from '@/api/role'
+    import { listPowerRequest,getPower } from '@/api/power'
+    import powerFormatTree from '@/utils/powerFormatTree'
+
     export default {
         data() {
             return {
                 filters: {
                     role_name: ''
                 },
+                tree_date: [],//树的结构数据
+                role_id: 0,
                 roles: [],
                 total: 0,
                 page: 1,
-
+                
+                powerFormVisible: false, //拥有权限界面是否显示
+                powerLoading: false,
+                defaultProps: {
+                          children: 'children',
+                          label: 'label'
+                },
 
                 listLoading: false,
                 sels: [],//列表选中列
@@ -109,7 +140,7 @@
                 },
                 //新增界面数据
                 addForm: {
-                    role_name : '',
+                    roleName : '',
                 }
             }
         },
@@ -124,35 +155,107 @@
                     page: this.page,
                     role_name: this.filters.role_name
                 };
-                this.listLoading = true;
+                this.listLoading = true
                 //NProgress.start();
                 
                 listRoleRequest(para).then(res => {
                     if(res.data.code==1){
-                        this.roles=[];
-                        this.total=0;
-                        this.listLoading = false;
+                        this.roles=[]
+                        this.total=0
+                        this.listLoading = false
                     }
                     else if (res.data.code==0)
                     {  
-                       this.roles = JSON.parse(res.data.data).role;
+                       this.roles = JSON.parse(res.data.data).role
                        this.total = this.roles.length; 
-                       this.listLoading = false;
+                       this.listLoading = false
                     }
                     else{
-                        this.listLoading=false;
+                        this.listLoading=false
                         this.$message({
-                            message:'获取权限数据失败',
+                            message:'角色数据获取失败',
                             type:'warning'
                         });
                     }  
                     //NProgress.done();
                 });
             },
-            //删除
+            //显示权限处理界面
             powerEdit: function (index,row){
-                 
+                let para ={}
+                this.role_id=row.role_id
+                listPowerRequest(para).then(res => {
+                    if(res.data.code==1){
+                       this.tree_date=[]
+                    }
+                    else if (res.data.code==0)
+                    {  
+                       this.tree_date=[]
+                       let date_in= JSON.parse(res.data.data).power
+                       powerFormatTree(this.tree_date,date_in)
+                       let request = {roleId: row.role_id}
+                       getPower(request).then(response => {
+                         let {code, msg, data}=response.data
+                         if(code==0){
+                            let my_power=JSON.parse(data).power
+                            let power_ex=[]
+                            my_power.forEach(item =>{
+                                    let info=item.power_id
+                                    power_ex.push(info)
+                            });
+                            this.$refs.tree.setCheckedKeys(power_ex)                   
+                         }
+                         else
+                         {
+                            this.$message({
+                                message:'无任何权限或权限数据获取失败',
+                                type:'warning'
+                            });
+                         }
+                       });
+                    }
+                    else{
+                        this.$message({
+                            message:'无任何权限或权限数据获取失败',
+                            type:'warning'
+                        });
+                    }  
+                });
+                this.powerFormVisible=true
             },
+            powerSubmit: function (){
+                this.$confirm('确认修改权限吗？', '提示', {}).then(() => {
+                    this.powerLoading=true
+                    let para=this.$refs.tree.getCheckedKeys()
+                    para.push(this.role_id)
+                    changePower(para).then(res =>  {
+                        if(res.data.code==0){
+                        this.powerLoading=false    
+                        this.$message({
+                            message: '修改权限成功',
+                            type: 'success'
+                        });
+                        }
+                        else if(res.data.code==1){
+                        this.powerLoading=false    
+                        this.$message({
+                            message: '修改权限失败',
+                            type: 'warning'
+                        });
+                        }
+                        else {
+                        this.powerLoading=false        
+                        this.$message({
+                        message: '服务器或网络错误',
+                            type: 'error'
+                        });
+                        } 
+                        this.powerFormVisible=false
+                    });
+                
+                });
+            },
+            //删除
             handleDel: function (index, row) {
                 this.$confirm('确认删除该记录吗?', '提示', {
                     type: 'warning'
@@ -161,7 +264,7 @@
                     //NProgress.start();
                  
                     let para =[];
-                    para.push({id:row.id});   
+                    para.push(row.role_id);   
 
                     removeRoleRequest(para).then(data => {
                         this.listLoading = false;
@@ -184,7 +287,7 @@
                                     type: 'error'
                                 });
                             }
-                        this.getRoles();
+                         this.getRoles();
                     });
                 }).catch(() => {
 
@@ -192,16 +295,19 @@
             },
             //显示编辑界面
             handleEdit: function (index, row) {
-                this.editFormVisible = true;
-
-                this.editForm = Object.assign({}, row);
+                this.editFormVisible = true
+                console.log(row)
+                this.editForm = {
+                    roleName: row.role_name,
+                    roleId: row.role_id
+                }
             },
             //显示新增界面
             handleAdd: function () {
-                this.addFormVisible = true;
+                this.addFormVisible = true
                 this.addForm = {
-                    role_name: ''
-                };
+                    roleName: ''
+                }
             },
             //编辑
             editSubmit: function () {
@@ -210,9 +316,8 @@
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.editLoading = true;
                             //NProgress.start();
-                            //this.editForm.password=this.md5(this.editForm.password);
+                            
                             let para = Object.assign({}, this.editForm);
-                            //para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             updateRoleRequest(para).then(data => {
                                 this.editLoading = false;
                                 //NProgress.done();
@@ -290,10 +395,10 @@
                 //var ids = this.sels.map(item => item.id).toString();
                 
                 let idss=[ ];
-                let sss =this.sels.map(item => item.id);
+                let sss =this.sels.map(item => item.role_id);
                 for(var key in sss)  
                 {
-                     idss.push({id:sss[key]})  ;  
+                     idss.push(sss[key])  ;  
                 };
 
                 //console.log(idss);

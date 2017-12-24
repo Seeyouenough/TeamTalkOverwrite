@@ -61,13 +61,10 @@ service.interceptors.response.use(
 //       return response.data;
 //     }
   error => {
+
     console.log('err' + error)// for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
-    return Promise.reject(error)
+    let res ={code:100,msg:'network error',data:[]};
+    return {data:res}
   }
 )
 

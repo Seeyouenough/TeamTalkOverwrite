@@ -1,9 +1,6 @@
 package com.grpc.java.server;
 
-import com.grpc.java.kernel.entity.manager_info;
-import com.grpc.java.kernel.entity.manager_role_info;
-import com.grpc.java.kernel.entity.power_info;
-import com.grpc.java.kernel.entity.role_power_info;
+import com.grpc.java.kernel.entity.*;
 import com.grpc.java.service.*;
 import com.power.grpc.Power;
 import com.power.grpc.PowerRequest;
@@ -46,10 +43,11 @@ public class PowerServerImpl extends PowerServiceGrpc.PowerServiceImplBase {
         if(power!=null){
             status=1;
         }else {
-            power.setParentId(parent_id);
-            power.setPowerName(name);
-            power.setPowerUrl(url);
-            powerService.add(power);
+            power_info pi =new power_info();
+            pi.setParentId(parent_id);
+            pi.setPowerName(name);
+            pi.setPowerUrl(url);
+            powerService.add(pi);
             status=0;
         }
 
@@ -199,6 +197,63 @@ public class PowerServerImpl extends PowerServiceGrpc.PowerServiceImplBase {
             }
             status=0;
         }
+
+        PowerResponse response=builder.setStatusId(status).build();
+
+        responseStreamObserver.onNext(response);
+        responseStreamObserver.onCompleted();
+    }
+
+    @Override
+    public void getPower(PowerRequest request,StreamObserver<PowerResponse> responseStreamObserver){
+        int id=request.getId();
+        int count=0;
+        int status=-1;
+        List<Integer> cc=new ArrayList<Integer>();
+        List<Integer> dd=new ArrayList<Integer>();
+        dd.add(0);
+
+        PowerResponse.Builder builder=PowerResponse.newBuilder();
+
+        role_info role =roleService.getId(id);
+        if(role!=null){
+            List<role_power_info> rp=role_powerService.getAll();
+            for(role_power_info aa:rp) {
+                if (aa.getRoleId() == role.getRoleId()) {
+                    cc.add(aa.getPowerId());
+                }
+            }
+        }else {
+            status=1;
+        }
+
+        if(cc.size()>0){
+            for(int zz : cc){
+                for(int i=0; i<dd.size(); i++){ //去除重复权限id
+                    if(dd.get(i)==zz){
+                        count=1;
+                    }
+                }
+                if(count==0){
+                    dd.add(zz);
+                }
+                count=0;
+            }
+            dd.remove(0);
+            for(int power_id :dd){
+                power_info power=powerService.getId(power_id);
+                if(power!=null){
+                    Power.Builder bu=Power.newBuilder();
+                    bu.setPowerId(power_id);
+                    bu.setPowerUrl(power.getPowerUrl());
+                    bu.setPowerName(power.getPowerName());
+                    bu.setParentId(power.getParentId());
+                    builder.addPower(bu);
+                }
+            }
+            status=0;
+        }
+
 
         PowerResponse response=builder.setStatusId(status).build();
 

@@ -9,11 +9,10 @@ import com.discovery.grpc.DiscoveryRequest;
 import com.discovery.grpc.DiscoveryResponse;
 import com.discovery.grpc.DiscoveryServiceGrpc;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.webjava.kernel.entity.IMDiscovery;
-import com.webjava.model.IDList;
-import com.webjava.model.IDObject;
 import com.webjava.utils.HttpUtils;
 import com.webjava.utils.ResponseInfo;
 import io.grpc.ManagedChannel;
@@ -24,6 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -107,8 +109,9 @@ public class DiscoveryRestController {
     public void removeDiscovery(HttpServletRequest request,HttpServletResponse response ) {
 
         String strjson = HttpUtils.getJsonBody(request);
-        Gson gson = new Gson();
-        IDList IDs = gson.fromJson(strjson, IDList.class);
+        List<Integer> list=new ArrayList<Integer>();
+        Type type = new TypeToken<ArrayList<Integer>>(){}.getType();
+        list = new Gson().fromJson(strjson, type);
 
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
@@ -121,11 +124,10 @@ public class DiscoveryRestController {
 
         DiscoveryRequest.Builder builder = DiscoveryRequest.newBuilder();
         // Create a request
-        for (IDObject id: IDs.getParams()) {
+        for (int i : list) {
             Discovery.Builder bu = Discovery.newBuilder();
-            bu.setId(id.getId());
+            bu.setId(i);
             Discovery discovery =bu.build();
-
             builder.addDiscovery(discovery);
           }
 

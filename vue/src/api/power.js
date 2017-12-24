@@ -40,3 +40,12 @@ export function getRoute(token){
   })
 }
 
+export function getPower(data){
+  return fetch({
+     url: '/getPower',
+     method: 'post',
+     data
+  })
+}
+
+

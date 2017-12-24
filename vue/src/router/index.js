@@ -42,16 +42,9 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  // mode: 'history', //后端支持可开
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
-//将每个页面设置一个权限名,每次用户登录,先访问用户表,用户表访问角色表,
-//角色表访问权限表
-//权限表
-//添加角色,一行,一角色对应多权限,访问角色时,将id为该角色的所有权限找出,放到一个数组中
-//然后将该数组返回给用户,同时一个用户对应多个角色,将所有的权限判断之后,全部放在一
-//个数组中,返回它
 /*export const asyncRouterMap = [
   {
     path: '/permission',

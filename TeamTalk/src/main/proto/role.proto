@@ -12,6 +12,10 @@ message Role{
 }
 
 message RoleRequest{
+    int32 manager_id=10;
+
+    repeated int32 id=7;
+
     int32 role_id=4;
 
     string role_name=1;
@@ -20,6 +24,10 @@ message RoleRequest{
 }
 
 message RoleResponse{
+    int32 manager_id=10;
+
+    repeated int32 id=7;
+
     int32 role_id=4;
 
     string role_name=1;
@@ -27,7 +35,7 @@ message RoleResponse{
     repeated Role role=5;
 
     int32 status_id=6;
-    
+
 }
 
 service RoleService{
@@ -35,4 +43,6 @@ service RoleService{
     rpc addRole(RoleRequest) returns (RoleResponse);
     rpc removeRole(RoleRequest) returns (RoleResponse);
     rpc modifyRole(RoleRequest) returns (RoleResponse);
+    rpc changePower(RoleRequest) returns (RoleResponse);
+    rpc getRole(RoleRequest) returns (RoleResponse);
 }

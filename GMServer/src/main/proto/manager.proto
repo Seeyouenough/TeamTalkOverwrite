@@ -19,6 +19,8 @@ message Manager{
 }
 
 message ManagerRequest {
+    repeated int32 role_id=7;
+
     int32 id=1;
 
     string username=2;
@@ -27,11 +29,17 @@ message ManagerRequest {
 
     string token=4;
 
+    string introduction=9;
+
+    string avatar=8;
+
     repeated Manager manager=5;
 
 }
 
 message ManagerResponse {
+    repeated int32 role_id=7;
+
     int32 id=1;
 
     string username=2;
@@ -41,6 +49,10 @@ message ManagerResponse {
     int32 status_id=4;
 
     string token=6;
+
+    string introduction=9;
+
+    string avatar=8;
 
     repeated Manager manager=5;
 
@@ -53,4 +65,6 @@ service ManagerService{
     rpc removeManager(ManagerRequest) returns (ManagerResponse);
     rpc listManager(ManagerRequest) returns (ManagerResponse);
     rpc getInfo(ManagerRequest) returns (ManagerResponse);
+    rpc changeRole(ManagerRequest) returns (ManagerResponse);
+    rpc modify(ManagerRequest) returns (ManagerResponse);
 }

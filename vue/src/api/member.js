@@ -1,7 +1,6 @@
 import fetch from '@/utils/fetch'
 
 export function listUsersRequest() {
-  
   return fetch({
     url: '/user/list',
     method: 'get'

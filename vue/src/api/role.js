@@ -32,4 +32,18 @@ export function updateRoleRequest(data) {
   })
 }
 
+export function changePower(data) {
+  return fetch({
+    url: '/role/changePower',
+    method: 'post',
+    data
+  })
+}
 
+export function getRole(data) {
+  return fetch({
+    url: '/role/getRole',
+    method: 'post',
+    data
+  })
+}

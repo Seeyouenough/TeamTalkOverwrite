@@ -25,7 +25,7 @@
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
-import {  transData } from '@/utils/jsonFormatTree'
+import {  transData } from '@/utils/jsonFormatSidebarTree'
 import menu from '@/menu'
 
 export default {

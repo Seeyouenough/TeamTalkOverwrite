@@ -15,19 +15,6 @@ export default(routers_ex,routers_data) => {
                   icon:"star",
                   leaf:true,
               }
-              /*let router_info={
-                  id:item.id,
-                  pid:item.pid,
-                  name:item.name,
-                  path:item.path,
-                  com:item.path,
-                  hidden: false,
-                  icon:"star",
-                  leaf:true,
-              }*/
-              /*if(router_info.pid == 0){
-                router_info.path="/"+router_info.path
-              }*/
               
               jsonData.push(router_info)
       });
@@ -61,15 +48,9 @@ function transData(r,a, idStr, pidStr, chindrenStr){
             hashVP[children].push(aVal);
 
         }else{
-            /*if(aVal.children.length == 1){
-              aVal.leaf = false
-              console.log(aVal)
-            }*/
-
             delete aVal.id
             delete aVal.pid   
             r.push(aVal);   
-
         }    
     }    
     return r;    

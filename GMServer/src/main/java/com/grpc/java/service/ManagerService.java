@@ -19,6 +19,10 @@ public interface ManagerService {
 
     Boolean add(manager_info user);
 
+    Boolean delete(Integer id);
+
+    Boolean update(manager_info user);
+
     List<manager_info> getAll();
 
     Boolean updatePassword(manager_info user);

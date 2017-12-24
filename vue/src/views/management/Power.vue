@@ -45,15 +45,15 @@
         <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="权限名称" prop="power_name">
-                    <el-input v-model="editForm.power_name" ></el-input>
+                    <el-input v-model="editForm.powerName" ></el-input>
                 </el-form-item>
 
                 <el-form-item label="权限URL" prop="power_url">
-                    <el-input v-model="editForm.power_url" ></el-input>
+                    <el-input v-model="editForm.powerUrl" ></el-input>
                 </el-form-item>
                 
                 <el-form-item label="父权限ID" prop="parent_id">
-                    <el-input v-model="editForm.parent_id" ></el-input>
+                    <el-input v-model="editForm.parentId" ></el-input>
                 </el-form-item>
 
             </el-form>
@@ -67,15 +67,15 @@
         <el-dialog title="新增" :visible.sync="addFormVisible"  :close-on-click-modal="false" >
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
                 <el-form-item label="权限名称">
-                    <el-input v-model="addForm.power_name" auto-complete="off"></el-input>
+                    <el-input v-model="addForm.powerName" auto-complete="off"></el-input>
                 </el-form-item>
 
                 <el-form-item  label="权限URL">
-                    <el-input type="password" v-model="addForm.power_url" auto-complete="off"></el-input>
+                    <el-input type="text" v-model="addForm.powerUrl" auto-complete="off"></el-input>
                 </el-form-item>
 
                 <el-form-item label="父权限ID">
-                    <el-input v-model="addForm.parent_id" auto-complete="off"></el-input>
+                    <el-input v-model="addForm.parentId" auto-complete="off"></el-input>
                 </el-form-item>
 
             </el-form>
@@ -84,6 +84,8 @@
                 <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
             </div>
         </el-dialog>
+        
+        
 
     </section>
 </template>
@@ -102,45 +104,49 @@
                     power_name: ''
                 },
                 powers: [],
+                
                 total: 0,
                 page: 1,
 
 
                 listLoading: false,
                 sels: [],//列表选中列
+                
+               
+
 
                 editFormVisible: false,//编辑界面是否显示
                 editLoading: false,
                 editFormRules: {
-                    power_name: [
+                    powerName: [
                         { required: true, message: '请输入权限名称', trigger: 'blur' }
                     ]
                 },
                 //编辑界面数据
                 editForm: {
-                    power_name: '',
-                    power_url: '',
-                    parent_id: 0
+                    powerName: '',
+                    powerUrl: '',
+                    parentId: 0
                 },
 
                 addFormVisible: false,//新增界面是否显示
                 addLoading: false,
                 addFormRules: {
-                    power_name: [
+                    powerName: [
                         { required: true, message: '请输入权限名称', trigger: 'blur' }
                     ],
-                    power_url: [
+                    powerUrl: [
                         { required: true, message: '请输入权限url', trigger: 'blur' }
                     ],
-                    parent_id: [
+                    parentId: [
                         { required: true, message: '请输入父权限ID', trigger: 'blur' }
                     ]
                 },
                 //新增界面数据
                 addForm: {
-                    power_name : '',
-                    power_url : '',
-                    parent_id : 0
+                    powerName : '',
+                    powerUrl : '',
+                    parentId : 0
                 }
             }
         },
@@ -189,7 +195,7 @@
                     //NProgress.start();
                  
                     let para =[];
-                    para.push({id:row.id});   
+                    para.push(row.power_id);   
 
                     removePowerRequest(para).then(data => {
                         this.listLoading = false;
@@ -199,6 +205,7 @@
                                 message: '删除成功',
                                 type: 'success'
                             });
+                                
                             }
                             else if(data.data.code==1){
                                 this.$message({
@@ -221,24 +228,20 @@
             //显示编辑界面
             handleEdit: function (index, row) {
                 this.editFormVisible = true;
-
-                this.editForm = Object.assign({}, row);
-                /*this.editForm ={
-                    name: '',
-                    password:'',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    email: ''
-                };*/
+                this.editForm ={
+                    powerId : row.power_id,
+                    powerName : row.power_name,
+                    powerUrl : row.power_url,
+                    parentId : row.parent_id
+                };
             },
             //显示新增界面
             handleAdd: function () {
                 this.addFormVisible = true;
                 this.addForm = {
-                    power_name: '',
-                    power_url:'',
-                    parent_id:0
+                    powerName: '',
+                    powerUrl:'',
+                    parentId:0
                 };
             },
             //编辑
@@ -259,6 +262,7 @@
                                     message: '提交成功',
                                     type: 'success'
                                 });
+                                   
                                 }
                                 else if(data.data.code==1){
                                     this.$message({
@@ -297,6 +301,7 @@
                                     message: '提交成功',
                                     type: 'success'
                                 });
+                                  
                                 }
                                 else if(data.data.code==1){
                                     this.$message({
@@ -310,10 +315,9 @@
                                         type: 'error'
                                     });
                                 }
-                                
-                                this.$refs['addForm'].resetFields();
-                                this.addFormVisible = false;
-                                this.getPowers();
+                               this.addFormVisible = false;
+                               this.$refs['addForm'].resetFields();
+                               this.getPowers(); 
                             });
                         });
                     }
@@ -328,10 +332,10 @@
                 //var ids = this.sels.map(item => item.id).toString();
                 
                 let idss=[ ];
-                let sss =this.sels.map(item => item.id);
+                let sss =this.sels.map(item => item.power_id);
                 for(var key in sss)  
                 {
-                     idss.push({id:sss[key]})  ;  
+                     idss.push(sss[key])  ;  
                 };
 
                 //console.log(idss);
@@ -350,6 +354,7 @@
                                 message: '删除成功',
                                 type: 'success'
                             });
+
                             }
                             else if(data.data.code==1){
                                 this.$message({

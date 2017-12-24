@@ -116,6 +116,28 @@
             </div>
         </el-dialog> 
 
+        <el-dialog title="拥有角色" :visible.sync="roleFormVisible"  :close-on-click-modal="false" >
+            <div>
+            <el-tree
+            :data="tree_date"
+            :props="defaultProps"
+            show-checkbox
+            node-key="id"
+            ref="tree"
+            :check-strictly="true"
+            highlight-current
+            default-expand-all
+            :expand-on-click-node="false">
+
+            </el-tree>
+            </div>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click.native="roleFormVisible = false">取消</el-button>
+                <el-button type="primary" @click.native="roleSubmit" :loading="roleLoading">提交</el-button>
+            </div>
+        </el-dialog>
+
     </section>
 </template>
 
@@ -123,8 +145,8 @@
     import util from '@/common/js/util'
     //import md5 from 'js-md5';
     //import NProgress from 'nprogress'
-    import { listManagerRequest,addManagerRequest,removeManagerRequest,updateManagerRequest,updatePasswordRequest } from '@/api/manager'
-    
+    import { listManagerRequest,addManagerRequest,removeManagerRequest,updateManagerRequest,updatePasswordRequest,changeRole } from '@/api/manager'
+    import { listRoleRequest,getRole } from '@/api/role'
   
     export default {
         data() {
@@ -132,10 +154,18 @@
                 filters: {
                     username: ''
                 },
+                tree_date: [],//树的结构数据
+                manager_id: 0,
                 users: [],
                 total: 0,
                 page: 1,
-
+ 
+                roleFormVisible: false, //拥有权限界面是否显示
+                roleLoading: false,
+                defaultProps: {
+                          children: 'children',
+                          label: 'label'
+                },
 
                 listLoading: false,
                 sels: [],//列表选中列
@@ -218,8 +248,6 @@
                 };
                 this.listLoading = true;
                 //NProgress.start();
-                
-                
 
                 listManagerRequest(para).then(res => {
                     let {code,msg,data}=res.data;
@@ -245,6 +273,88 @@
                     //NProgress.done();
                 });
             },
+            //显示角色处理界面
+            roleEdit: function (index,row){
+                let para ={}
+                this.manager_id=row.id
+                listRoleRequest(para).then(res => {
+                    if(res.data.code==1){
+                       this.tree_date=[]
+                    }
+                    else if (res.data.code==0)
+                    {  
+                       this.tree_date=[]
+                       let date_in= JSON.parse(res.data.data).role
+                       date_in.forEach(item =>{
+                            let info={
+                                        id:item.role_id,
+                                        label:item.role_name
+                            }
+                            this.tree_date.push(info)
+                       });
+                       let request = {id: row.id}
+                       getRole(request).then(response => {
+                         let {code, msg, data}=response.data
+                         if(code==0){
+                            let my_role=JSON.parse(data).role
+                            let role_ex=[]
+                            my_role.forEach(item =>{
+                                    let info=item.role_id
+                                    role_ex.push(info)
+                            });
+                            console.log(role_ex)
+                            this.$refs.tree.setCheckedKeys(role_ex)                   
+                         }
+                         else 
+                         {
+                            this.$message({
+                                message:'无任何角色或角色数据获取失败',
+                                type:'warning'
+                            });
+                         }
+                       });
+                    }
+                    else{
+                        this.$message({
+                            message:'无任何角色或角色数据获取失败',
+                            type:'warning'
+                        });
+                    }  
+                });
+                this.roleFormVisible=true
+            },
+            roleSubmit: function (){
+                this.$confirm('确认修改所属角色吗？', '提示', {}).then(() => {
+                    this.roleLoading=true
+                    let para=this.$refs.tree.getCheckedKeys()
+                    para.push(this.manager_id)
+                    changeRole(para).then(res =>  {
+                        if(res.data.code==0){
+                        this.roleLoading=false    
+                        this.$message({
+                            message: '修改角色成功',
+                            type: 'success'
+                        });
+                        }
+                        else if(res.data.code==1){
+                        this.roleLoading=false    
+                        this.$message({
+                            message: '修改角色失败',
+                            type: 'warning'
+                        });
+                        }
+                        else {
+                        this.roleLoading=false        
+                        this.$message({
+                        message: '服务器或网络错误',
+                            type: 'error'
+                        });
+                        } 
+                        this.roleFormVisible=false
+                    });
+                
+                });
+            },
             //删除
             handleDel: function (index, row) {
                 this.$confirm('确认删除该记录吗?', '提示', {
@@ -254,7 +364,7 @@
                     //NProgress.start();
                  
                     let para =[];
-                    para.push({id:row.id});   
+                    para.push(row.id);   
 
                     removeManagerRequest(para).then(data => {
                         this.listLoading = false;
@@ -282,10 +392,6 @@
                 }).catch(() => {
 
                 });
-            },
-            //显示权限界面
-            roleEdit: function (index,row) {
-
             },
             //显示编辑界面
             handleEdit: function (index, row) {
@@ -326,7 +432,8 @@
                 this.addForm = {
                     username: '',
                     password:'',
-                    introduction:''
+                    introduction:'',
+                    avatar : 'static/pic/gg.gif'
                 };
             },
             //编辑
@@ -375,7 +482,7 @@
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             this.addLoading = true;
                             //NProgress.start();
-                            let para = Object.assign({}, this.addForm);
+                            let para = Object.assign({}, this.addForm)
                             //para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
                             addManagerRequest(para).then(data => {
                                 
@@ -459,7 +566,7 @@
                 let sss =this.sels.map(item => item.id);
                 for(var key in sss)  
                 {
-                     idss.push({id:sss[key]})  ;  
+                     idss.push(sss[key])  ;  
                 };
 
                 //console.log(idss);

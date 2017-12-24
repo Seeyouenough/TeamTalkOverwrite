@@ -6,6 +6,7 @@ package com.webjava.web.restcontroller;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.manager.grpc.Manager;
@@ -14,8 +15,6 @@ import com.manager.grpc.ManagerResponse;
 import com.manager.grpc.ManagerServiceGrpc;
 import com.webjava.kernel.entity.IMManager;
 import com.webjava.model.CheckLogin;
-import com.webjava.model.IDList;
-import com.webjava.model.IDObject;
 import com.webjava.utils.HttpUtils;
 import com.webjava.utils.ResponseInfo;
 import io.grpc.ManagedChannel;
@@ -27,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -167,6 +169,8 @@ public class ManagerRestController {
         ManagerRequest addManagerRequest = ManagerRequest.newBuilder()
                 .setUsername(manager.getUsername())
                 .setPassword(manager.getPassword())
+                .setIntroduction(manager.getIntroduction())
+                .setAvatar(manager.getAvatar())
                 .build();
 
         // Send the request using the stub
@@ -182,6 +186,42 @@ public class ManagerRestController {
 
 
     }
+
+    @RequestMapping(value = "/manager/modify",method = RequestMethod.POST)
+    public void modify(HttpServletRequest request,HttpServletResponse response){
+        String strData =HttpUtils.getJsonBody(request);
+        Gson gson=new Gson();
+        IMManager manager = gson.fromJson(strData,IMManager.class);
+        
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
+
+        // Create a blocking stub with the channel
+        ManagerServiceGrpc.ManagerServiceBlockingStub stub =
+                ManagerServiceGrpc.newBlockingStub(channel);
+
+        // Create a request
+        ManagerRequest modifyRequest =ManagerRequest.newBuilder()
+                .setId(manager.getId())
+                .setUsername(manager.getUsername())
+                .setIntroduction(manager.getIntroduction())
+                .build();
+
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        ManagerResponse managerResponse = stub.modify(modifyRequest);
+
+        if(managerResponse.getStatusId()==0){
+            HttpUtils.setJsonBody(response,new ResponseInfo(0,"修改成功"));
+        }else
+        {
+            HttpUtils.setJsonBody(response,new ResponseInfo(1,"内容不存在"));
+        }
+
+
+    }
+
 
     @RequestMapping(value = "/manager/list", method = RequestMethod.GET)
     public void listManager(HttpServletRequest request,HttpServletResponse response) throws InvalidProtocolBufferException {
@@ -214,11 +254,11 @@ public class ManagerRestController {
     }
 
     @RequestMapping(value = "/manager/remove", method = RequestMethod.POST)
-    public void removeManager(HttpServletRequest request,HttpServletResponse response)
-    {
+    public void removeManager(HttpServletRequest request,HttpServletResponse response) {
         String strjson = HttpUtils.getJsonBody(request);
-        Gson gson = new Gson();
-        IDList IDs = gson.fromJson(strjson, IDList.class);
+        List<Integer> list=new ArrayList<Integer>();
+        Type type = new TypeToken<ArrayList<Integer>>(){}.getType();
+        list = new Gson().fromJson(strjson, type);
 
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
@@ -231,11 +271,10 @@ public class ManagerRestController {
 
         ManagerRequest.Builder builder = ManagerRequest.newBuilder();
         // Create a request
-        for (IDObject id: IDs.getParams()) {
+        for (int i : list) {
             Manager.Builder bu = Manager.newBuilder();
-            bu.setId(id.getId());
+            bu.setId(i);
             Manager manager =bu.build();
-
             builder.addManager(manager);
         }
 
@@ -251,4 +290,41 @@ public class ManagerRestController {
             HttpUtils.setJsonBody(response, new ResponseInfo(1, "部分信息未找到或未删除！"));
         }
     }
+
+    @RequestMapping(value = "/manager/changeRole",method = RequestMethod.POST)
+    public void changeRole(HttpServletRequest request,HttpServletResponse response) {
+        String strjson = HttpUtils.getJsonBody(request);
+        List<Integer> list=new ArrayList<Integer>();
+
+        Type type = new TypeToken<ArrayList<Integer>>(){}.getType();
+        list = new Gson().fromJson(strjson, type);
+        int id=list.get(list.size()-1);
+        list.remove(list.size()-1);
+
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT)
+                .usePlaintext(true)
+                .build();
+
+        // Create a blocking stub with the channel
+        ManagerServiceGrpc.ManagerServiceBlockingStub stub =
+                ManagerServiceGrpc.newBlockingStub(channel);
+
+        // Create a request
+        ManagerRequest changeRoleRequest =ManagerRequest.newBuilder()
+                .setId(id)
+                .addAllRoleId(list)
+                .build();
+
+        // Send the request using the stub
+        System.out.println("Client sending request");
+        ManagerResponse userResponse = stub.changeRole(changeRoleRequest);
+
+        if (userResponse.getStatusId()==0) {
+            HttpUtils.setJsonBody(response, new ResponseInfo(0, "修改权限成功！"));
+        } else {
+            HttpUtils.setJsonBody(response, new ResponseInfo(1, "修改权限失败！"));
+        }
+    }
+
+
 }

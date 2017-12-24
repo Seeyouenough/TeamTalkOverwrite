@@ -45,6 +45,16 @@ public class ManagerServiceImpl implements ManagerService {
         return this.managerMapper.insertSelective(user) > 0;
     }
 
+    @Override
+    public Boolean delete(Integer id) {
+        return managerMapper.deleteByPrimaryKey(id) > 0;
+    }
+
+    @Override
+    public Boolean update(manager_info user) {
+        return managerMapper.updateByPrimaryKeySelective(user) > 0;
+    }
+
 
     @Override
     public Boolean updatePassword(manager_info user) {
