@@ -6,7 +6,7 @@ import { getToken } from '@/utils/auth' // 验权
 import { Message } from 'element-ui'
 
 // register global progress.
-const whiteList = ['/login', '/authredirect']// 不重定向白名单
+const whiteList = ['/login', '/authredirect','/register']// 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start() // 开启Progress
   if (getToken()) { // 判断是否有token

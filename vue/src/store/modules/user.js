@@ -98,8 +98,6 @@ const user = {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
-          //window.sessionStorage.removeItem("addRouters")
-          //window.sessionStorage.removeItem("routers")
           removeToken()
           resolve()
         }).catch(error => {

@@ -54,7 +54,7 @@
 					<el-input v-model="editForm.priority" ></el-input>
 				</el-form-item> -->
 
-				<el-form-item label="部门优先级"  label-width="100px" >
+				<el-form-item label="部门优先级"  label-width="100px" prop="priority">
 
 					<el-select v-model="editForm.priority" placeholder="请选择部门优先级" >
 						<el-option v-for="item in priorityList" :label="item.name" :value="item.id" :key="item.id" ></el-option>   
@@ -63,7 +63,7 @@
 				</el-form-item>
 
 
-				<el-form-item label="父部门">
+				<el-form-item label="父部门" prop="parentid">
 <!-- 					<el-input  v-model="addForm.parentid"></el-input> -->                   
                    <el-select v-model="editForm.parentid" >
 					 <el-option v-for="item in departList" :label="item.name" :value="item.id"  :key="item.id" ></el-option>   
@@ -81,11 +81,11 @@
 		<!--新增界面-->
 		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="100px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="部门名称">
+				<el-form-item label="部门名称" prop="departname">
 					<el-input v-model="addForm.departname" auto-complete="off"></el-input>
 				</el-form-item>
 
-				<el-form-item label="部门优先级"  label-width="100px" >
+				<el-form-item label="部门优先级"  label-width="100px" prop="priority" >
 
 					<el-select v-model="addForm.priority" placeholder="请选择部门优先级">
 						 
@@ -95,7 +95,7 @@
 					<!-- <el-input v-model="addForm.priority" auto-complete="off"></el-input> -->			</el-form-item>
 
 
-				<el-form-item label="父部门">
+				<el-form-item label="父部门" prop="parentid">
 <!-- 					<el-input  v-model="addForm.parentid"></el-input> -->                   
                    <el-select v-model="addForm.parentid" placeholder="请选择父部门">
 					 <el-option v-for="item in departList" :label="item.name" :value="item.id"  :key="item.id"></el-option>   
@@ -151,6 +151,12 @@
 				editFormRules: {
 					departname: [
 						{ required: true, message: '请输入部门名称', trigger: 'blur' }
+					],
+					priority: [
+						{ required: true, message: '请选择优先级', trigger: 'blur' }
+					],
+					parentid: [
+						{ required: true, message: '请选择父部门', trigger: 'blur' }
 					]
 				},
 				//编辑界面数据
@@ -166,6 +172,12 @@
 				addFormRules: {
 					departname: [
 						{ required: true, message: '请输入部门名称', trigger: 'blur' }
+					],
+					priority: [
+						{ required: true, message: '请选择优先级', trigger: 'blur' }
+					],
+					parentid: [
+						{ required: true, message: '请选择父部门', trigger: 'blur' }
 					]
 				},
 				//新增界面数据

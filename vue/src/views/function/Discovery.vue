@@ -72,15 +72,15 @@
 		<!--新增界面-->
 		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="名称">
+				<el-form-item label="名称" prop="itemname">
 					<el-input v-model="addForm.itemname" auto-complete="off"></el-input>
 				</el-form-item>
 
-				<el-form-item label="URL">
+				<el-form-item label="URL" prop="itemurl">
 					<el-input v-model="addForm.itemurl" auto-complete="off"></el-input>
 				</el-form-item>
 
-				<el-form-item label="优先级">
+				<el-form-item label="优先级" prop="itempriority">
 
 					<el-select v-model="addForm.itempriority" placeholder="请选择优先级" >						                            
                        <el-option v-for="item in itemPriorityList" :label="item.name" :value="item.id" :key="item.id"  ></el-option>   						
@@ -132,8 +132,11 @@
 					itemname: [
 						{ required: true, message: '请输入名称', trigger: 'blur' }
 					],
-					password: [
-						{ required: true, message: '请输入密码', trigger: 'blur' }
+					itemurl: [
+						{ required: true, message: '请输入url', trigger: 'blur' }
+					],
+					itempriority: [
+						{ required: true, message: '请输入优先级', trigger: 'blur' }
 					]
 				},
 				//编辑界面数据
@@ -152,8 +155,11 @@
 					itemname: [
 						{ required: true, message: '请输入名称', trigger: 'blur' }
 					],
-					password: [
-						{ required: true, message: '请输入密码', trigger: 'blur' }
+					itemurl: [
+						{ required: true, message: '请输入url', trigger: 'blur' }
+					],
+					itempriority: [
+						{ required: true, message: '请输入优先级', trigger: 'blur' }
 					]
 				},
 				//新增界面数据

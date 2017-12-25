@@ -43,7 +43,7 @@
 			<el-table-column label="操作" width="300">
 				<template slot-scope="scope">
 
-					<el-button size="small" @click="EditPassword(scope.$index, scope.row)">改密</el-button>
+					<el-button size="small" @click="EditPassword(scope.$index, scope.row)">重置密码</el-button>
 
 				 	<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 				  
@@ -151,10 +151,8 @@
 
 
         <!--改密界面-->
-		<el-dialog title="改密" :visible.sync="editPasswordVisible" :close-on-click-modal="false">
+		<el-dialog title="重置用户密码" :visible.sync="editPasswordVisible" :close-on-click-modal="false">
 			<el-form :model="editPassword" label-width="150px" :rules="editPasswordRules" ref="editPassword">
-
-
 
                 <el-form-item  label="用户信息">
 					<el-input type="text" :disabled="true" v-model="editPassword.name" auto-complete="off"></el-input>
@@ -400,7 +398,7 @@
 			},
 			//显示改密界面
 			EditPassword: function (index, row) {
-				this.$confirm('确认更改密码吗?', '提示', {
+				this.$confirm('确认重置密码吗?', '提示', {
                     type: 'warning'
                 }).then(() => {
                 

@@ -23,7 +23,7 @@
             <el-table-column label="操作" min-width="300" >
                 <template slot-scope="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button size="small" @click="powerEdit(scope.$index, scope.row)">拥有权限</el-button>
+                    <el-button size="small" @click="powerEdit(scope.$index, scope.row)">权限管理</el-button>
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
@@ -53,7 +53,7 @@
         <!--新增界面-->
         <el-dialog title="新增" :visible.sync="addFormVisible"  :close-on-click-modal="false" >
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="角色名称">
+                <el-form-item label="角色名称" prop="roleName">
                     <el-input v-model="addForm.roleName" auto-complete="off"></el-input>
                 </el-form-item>
 
@@ -64,7 +64,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="拥有权限" :visible.sync="powerFormVisible"  :close-on-click-modal="false" >
+        <el-dialog title="修改管理员权限" :visible.sync="powerFormVisible"  :close-on-click-modal="false" >
             <div>
             <el-tree
             :data="tree_date"
@@ -122,7 +122,7 @@
                 editFormVisible: false,//编辑界面是否显示
                 editLoading: false,
                 editFormRules: {
-                    role_name: [
+                    roleName: [
                         { required: true, message: '请输入权限名称', trigger: 'blur' }
                     ]
                 },
@@ -134,7 +134,7 @@
                 addFormVisible: false,//新增界面是否显示
                 addLoading: false,
                 addFormRules: {
-                    role_name: [
+                    roleName: [
                         { required: true, message: '请输入权限名称', trigger: 'blur' }
                     ]
                 },

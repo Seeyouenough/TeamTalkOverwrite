@@ -24,9 +24,6 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
-import {  transData } from '@/utils/jsonFormatSidebarTree'
-import menu from '@/menu'
 
 export default {
   name: 'login',
@@ -53,7 +50,7 @@ export default {
   },
   methods: {
     goRegister(){
-      
+      this.$router.push({ path: '/register' })
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {

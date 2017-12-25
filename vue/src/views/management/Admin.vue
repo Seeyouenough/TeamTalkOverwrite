@@ -20,17 +20,17 @@
             <el-table-column prop="username" label="姓名" min-width="120" sortable>
             </el-table-column> 
             
-            <el-table-column prop="introduction" label="介绍" min-width="150" sortable>
+            <el-table-column prop="introduction" label="备注" min-width="150" sortable>
             </el-table-column> 
             
             <el-table-column label="操作" width="350">
                 <template slot-scope="scope">
 
-                    <el-button size="small" @click="EditPassword(scope.$index, scope.row)">改密</el-button>
+                    <el-button size="small" @click="EditPassword(scope.$index, scope.row)">重置密码</el-button>
 
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                   
-                    <el-button size="small" @click="roleEdit(scope.$index, scope.row)">拥有角色</el-button>
+                    <el-button size="small" @click="roleEdit(scope.$index, scope.row)">角色管理</el-button>
                     <!-- <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button> -->
                     <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 
@@ -53,7 +53,7 @@
                     <el-input v-model="editForm.username" ></el-input>
                 </el-form-item>
                 
-                <el-form-item label="介绍" prop="introduction">
+                <el-form-item label="备注" prop="introduction">
                     <el-input v-model="editForm.introduction" ></el-input>
                 </el-form-item>
 
@@ -67,16 +67,16 @@
         <!--新增界面-->
         <el-dialog title="新增" :visible.sync="addFormVisible"  :close-on-click-modal="false" >
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="姓名">
+                <el-form-item label="姓名" prop="username">
                     <el-input v-model="addForm.username" auto-complete="off"></el-input>
                 </el-form-item>
 
 
-                <el-form-item  label="密码">
+                <el-form-item  label="密码" prop="password">
                     <el-input type="password" v-model="addForm.password" auto-complete="off"></el-input>
                 </el-form-item>
 
-                <el-form-item label="介绍">
+                <el-form-item label="备注" prop="introduction">
                     <el-input v-model="addForm.introduction" auto-complete="off"></el-input>
                 </el-form-item>
 
@@ -89,7 +89,7 @@
 
 
         <!--改密界面-->
-        <el-dialog title="改密" :visible.sync="editPasswordVisible" :close-on-click-modal="false">
+        <el-dialog title="重置管理员密码" :visible.sync="editPasswordVisible" :close-on-click-modal="false">
             <el-form :model="editPassword" label-width="150px" :rules="editPasswordRules" ref="editPassword">
 
 
@@ -116,7 +116,7 @@
             </div>
         </el-dialog> 
 
-        <el-dialog title="拥有角色" :visible.sync="roleFormVisible"  :close-on-click-modal="false" >
+        <el-dialog title="修改管理员角色" :visible.sync="roleFormVisible"  :close-on-click-modal="false" >
             <div>
             <el-tree
             :data="tree_date"
@@ -175,6 +175,9 @@
                 editFormRules: {
                     username: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
+                    ],
+                    introduction: [
+                        { required: true, message: '请输入备注', trigger: 'blur' }
                     ]
                 },
                 //编辑界面数据
@@ -192,6 +195,9 @@
                     ],
                     password: [
                         { required: true, message: '请输入密码', trigger: 'blur' }
+                    ],
+                    introduction: [
+                        { required: true, message: '请输入备注', trigger: 'blur' }
                     ]
                 },
                 //新增界面数据
@@ -292,6 +298,7 @@
                             }
                             this.tree_date.push(info)
                        });
+                       this.$refs.tree.setCheckedKeys([])
                        let request = {id: row.id}
                        getRole(request).then(response => {
                          let {code, msg, data}=response.data
@@ -302,7 +309,6 @@
                                     let info=item.role_id
                                     role_ex.push(info)
                             });
-                            console.log(role_ex)
                             this.$refs.tree.setCheckedKeys(role_ex)                   
                          }
                          else 
@@ -324,7 +330,7 @@
                 this.roleFormVisible=true
             },
             roleSubmit: function (){
-                this.$confirm('确认修改所属角色吗？', '提示', {}).then(() => {
+                this.$confirm('确认修改角色吗？', '提示', {}).then(() => {
                     this.roleLoading=true
                     let para=this.$refs.tree.getCheckedKeys()
                     para.push(this.manager_id)
@@ -409,7 +415,7 @@
             },
             //显示改密界面
             EditPassword: function (index, row) {
-                this.$confirm('确认更改密码吗?', '提示', {
+                this.$confirm('确认重置密码吗?', '提示', {
                     type: 'warning'
                 }).then(() => {
                 

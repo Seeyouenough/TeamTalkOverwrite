@@ -60,11 +60,11 @@
 		<!--新增界面-->
 		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="群名称">
+				<el-form-item label="群名称" prop="name">
 					<el-input v-model="addForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 
-				<el-form-item label="成员人数">
+				<el-form-item label="成员人数" prop="usercnt">
 					<el-input v-model="addForm.usercnt" auto-complete="off"></el-input>
 				</el-form-item>
 
@@ -104,8 +104,8 @@
 					name: [
 						{ required: true, message: '请输入群名称', trigger: 'blur' }
 					],
-					password: [
-						{ required: true, message: '请输入密码', trigger: 'blur' }
+					usercnt: [
+						{ required: true, message: '请输入群成员人数', trigger: 'blur' }
 					]
 				},
 				//编辑界面数据
@@ -121,8 +121,8 @@
 					name: [
 						{ required: true, message: '请输入群名称', trigger: 'blur' }
 					],
-					password: [
-						{ required: true, message: '请输入密码', trigger: 'blur' }
+					usercnt: [
+						{ required: true, message: '请输入群成员人数', trigger: 'blur' }
 					]
 				},
 				//新增界面数据

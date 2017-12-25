@@ -66,15 +66,15 @@
         <!--新增界面-->
         <el-dialog title="新增" :visible.sync="addFormVisible"  :close-on-click-modal="false" >
             <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="权限名称">
+                <el-form-item label="权限名称" prop="power_name">
                     <el-input v-model="addForm.powerName" auto-complete="off"></el-input>
                 </el-form-item>
 
-                <el-form-item  label="权限URL">
+                <el-form-item  label="权限URL" prop="power_url">
                     <el-input type="text" v-model="addForm.powerUrl" auto-complete="off"></el-input>
                 </el-form-item>
 
-                <el-form-item label="父权限ID">
+                <el-form-item label="父权限ID" prop="parent_id">
                     <el-input v-model="addForm.parentId" auto-complete="off"></el-input>
                 </el-form-item>
 
@@ -118,9 +118,15 @@
                 editFormVisible: false,//编辑界面是否显示
                 editLoading: false,
                 editFormRules: {
-                    powerName: [
+                    power_name: [
                         { required: true, message: '请输入权限名称', trigger: 'blur' }
-                    ]
+                    ],
+                    power_url: [
+                        { required: true, message: '请输入权限url', trigger: 'blur' }
+                    ],
+                    parent_id: [
+                        { required: true, message: '请输入父权限Id', trigger: 'blur' }
+                    ],
                 },
                 //编辑界面数据
                 editForm: {
@@ -132,15 +138,15 @@
                 addFormVisible: false,//新增界面是否显示
                 addLoading: false,
                 addFormRules: {
-                    powerName: [
+                    power_name: [
                         { required: true, message: '请输入权限名称', trigger: 'blur' }
                     ],
-                    powerUrl: [
+                    power_url: [
                         { required: true, message: '请输入权限url', trigger: 'blur' }
                     ],
-                    parentId: [
-                        { required: true, message: '请输入父权限ID', trigger: 'blur' }
-                    ]
+                    parent_id: [
+                        { required: true, message: '请输入父权限Id', trigger: 'blur' }
+                    ],
                 },
                 //新增界面数据
                 addForm: {
