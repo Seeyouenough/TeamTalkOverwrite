@@ -13,7 +13,6 @@ import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 import com.webjava.kernel.entity.IMDepart;
-import com.webjava.kernel.service.IDepartService;
 import com.webjava.utils.HttpUtils;
 import com.webjava.utils.ResponseInfo;
 import io.grpc.ManagedChannel;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Type;
@@ -36,9 +34,6 @@ import java.util.List;
 @RequestMapping("/users")
 public class DepartRestController {
     public static Logger logger= LogManager.getLogger(DepartRestController.class.getName());
-    @Resource
-    private IDepartService departService;
-
 
     private static final String HOST = "localhost";
     private static final int PORT = 50051;

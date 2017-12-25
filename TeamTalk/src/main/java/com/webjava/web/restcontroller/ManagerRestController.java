@@ -325,6 +325,4 @@ public class ManagerRestController {
             HttpUtils.setJsonBody(response, new ResponseInfo(1, "修改权限失败！"));
         }
     }
-
-
 }
